@@ -54,7 +54,7 @@
               **Isi kolom di bawah dengan benar.
             </p>
             <div class="example">
-              <form class="form-horizontal" action="<?php echo base_url(); ?>PemasukanRBB/add_action_get" method="post" enctype="multipart/form-data">
+              <form class="form-horizontal" action="<?php echo base_url(); ?>PemasukanRBB/add_action" method="post" enctype="multipart/form-data">
 
                 <input type="text" autocomplete="off" name="get_jml" id="get_jml" class="form-control" value="" style="display: none;">
                 <input type="text" autocomplete="off" name="id_barang_real" id="id_barang_real" class="form-control" value="" style="display: none;">
@@ -348,91 +348,101 @@
 
     var calculated_total_sum = 0;
 
-        $("#myTablePK .classQty").each(function (){
-        var get_textbox_value = $(this).val();
-        if($.isNumeric(get_textbox_value)) {
-            calculated_total_sum += parseFloat(get_textbox_value);
-            document.getElementById("totalhasil3").value = calculated_total_sum;
-        }                  
-    });
+$("#myTablePK .classQty").each(function (){
+    var get_textbox_value = $(this).val();
+    if ($.isNumeric(get_textbox_value)) {
+        calculated_total_sum += parseFloat(get_textbox_value);
+    }
+});
+document.getElementById("totalhasil3").value = calculated_total_sum || 0; // Pastikan nilai default 0
 
-    
-        String.prototype.number_format = function(d) {
-            var n = this;
-            var c = isNaN(d = Math.abs(d)) ? 2 : d;
-            var s = n < 0 ? "-" : "";
-            var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-            return s + (j ? i.substr(0, j) + ',' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ',') + (c ? '.' + Math.abs(n - i).toFixed(c).slice(2) : "");
-        }
-        String.prototype.number_format2 = function(d) {
-            var n = this,
-                c = isNaN(d = Math.abs(d)) ? 2 : d,
-                s = n < 0 ? "-" : "",
-                i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-                j = (j = i.length) > 3 ? j % 3 : 0;
-            return s + (j ? i.substr(0, j) + '.' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + '.') + (c ? ',' + Math.abs(n - i).toFixed(c).slice(2) : "");
-        };
+String.prototype.number_format = function(d) {
+    var n = this;
+    var c = isNaN(d = Math.abs(d)) ? 2 : d;
+    var s = n < 0 ? "-" : "";
+    var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + ',' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ',') + (c ? '.' + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
 
-      
-    $("#qty"+ a).keyup(function(){
+String.prototype.number_format2 = function(d) {
+    var n = this,
+        c = isNaN(d = Math.abs(d)) ? 2 : d,
+        s = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + '.' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + '.') + (c ? ',' + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
+$("#qty" + a).keyup(function(){
     var qty_show = Number(document.getElementById("qty" + a).value);
     var harga_show = Number(document.getElementById("harga" + a).value);
     var getqty = Number(document.getElementById("totalhasil3").value);
     var calculate = qty_show + getqty;
 
-    var result_real   = qty_show * harga_show;
-                let text          = result_real.toString();
-                document.getElementById("total_show" + a).value = text.number_format2();
-                document.getElementById("total" + a).value = result_real;
+    var result_real = qty_show * harga_show;
+    let text = result_real.toString();
+    document.getElementById("total_show" + a).value = text.number_format2();
+    document.getElementById("total" + a).value = result_real;
 
-                var calculated_total_sum_qty = 0;
-                  $("#myTablePK .classQty").each(function (){
-                      var get_textbox_value = $(this).val().replace(",", "");
-                      calculated_total_sum_qty += parseFloat(get_textbox_value);    
-                  });
-
-                  var calculated_total_sum_total_harga = 0;
-                  $("#myTablePK .classTotal").each(function (){
-                      var get_textbox_value = $(this).val().replace(".", "");
-                      var get_textbox_value = get_textbox_value.replace(".", "");
-                      var get_textbox_value = get_textbox_value.replace(".", "");
-                      var get_textbox_value = get_textbox_value.replace(",", ".");
-                      calculated_total_sum_total_harga += parseFloat(get_textbox_value);    
-                  });
-
-                  document.getElementById("totalshowqty").value = calculated_total_sum_qty;
-                  document.getElementById("totalshowTH").value = calculated_total_sum_total_harga.toString().number_format2();
+    var calculated_total_sum_qty = 0;
+    $("#myTablePK .classQty").each(function (){
+        var get_textbox_value = $(this).val().replace(",", "");
+        if ($.isNumeric(get_textbox_value)) {
+            calculated_total_sum_qty += parseFloat(get_textbox_value);
+        }
     });
-  
 
-        $("#harga" + a).keyup(function() {
-            var qty = Number(document.getElementById("qty" + a).value);
-            var harga = document.getElementById("harga" + a).value;
-            
-            // Replace non-digit characters and format with dots
-            var formatted_harga = harga.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            $(this).val(formatted_harga);
-            
-            var result_real = qty * harga.replace(/\D/g, '');
-            let text = result_real.toString();
-            document.getElementById("total_show" + a).value = text.number_format2();
-            document.getElementById("total" + a).value = result_real;
+    var calculated_total_sum_total_harga = 0;
+    $("#myTablePK .classTotal").each(function (){
+        var get_textbox_value = $(this).val().replace(/\./g, '').replace(',', '.');
+        if ($.isNumeric(get_textbox_value)) {
+            calculated_total_sum_total_harga += parseFloat(get_textbox_value);
+        }
+    });
 
-            var calculated_total_sum_harga = 0;
-            $("#myTablePK .classHarga").each(function() {
-                var get_textbox_value = $(this).val().replace(/\D/g, '');
-                calculated_total_sum_harga += parseFloat(get_textbox_value);
-            });
+    document.getElementById("totalshowqty").value = calculated_total_sum_qty || 0;
+    document.getElementById("totalshowTH").value = (calculated_total_sum_total_harga || 0).toString().number_format2();
+});
 
-            var calculated_total_sum_total_harga = 0;
-            $("#myTablePK .classTotal").each(function() {
-                var get_textbox_value = $(this).val().replace(/\D/g, '');
-                calculated_total_sum_total_harga += parseFloat(get_textbox_value);
-            });
 
-            document.getElementById("totalshowTH").value = calculated_total_sum_total_harga.toString().number_format2();
-            document.getElementById("totalshowharga").value = calculated_total_sum_harga.toString().number_format2();
-        });
+$("#harga" + a).keyup(function() {
+    var qty = Number(document.getElementById("qty" + a).value);
+    var harga = document.getElementById("harga" + a).value;
+
+    // Replace non-digit characters and format with dots
+    var formatted_harga = harga.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    $(this).val(formatted_harga);
+
+    var result_real = qty * parseFloat(harga.replace(/\D/g, '') || 0);
+    let text = result_real.toString();
+    document.getElementById("total_show" + a).value = text.number_format2();
+    document.getElementById("total" + a).value = result_real;
+
+    var calculated_total_sum_harga = 0;
+    $("#myTablePK .classHarga").each(function() {
+        var get_textbox_value = $(this).val().replace(/\D/g, '');
+        calculated_total_sum_harga += parseFloat(get_textbox_value || 0);
+    });
+
+    var calculated_total_sum_total_harga = 0;
+    $("#myTablePK .classTotal").each(function() {
+        var get_textbox_value = $(this).val().replace(/\D/g, '');
+        calculated_total_sum_total_harga += parseFloat(get_textbox_value || 0);
+    });
+
+    document.getElementById("totalshowTH").value = (calculated_total_sum_total_harga || 0).toString().number_format2();
+    document.getElementById("totalshowharga").value = (calculated_total_sum_harga || 0).toString().number_format2();
+});
+
+String.prototype.number_format2 = function(d) {
+    var n = this,
+        c = isNaN(d = Math.abs(d)) ? 2 : d,
+        s = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + '.' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + '.') + (c ? ',' + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
 
 
         // Fungsi untuk menghitung biaya kurs
