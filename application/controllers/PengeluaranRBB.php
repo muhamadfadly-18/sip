@@ -331,280 +331,431 @@ class PengeluaranRBB  extends CI_Controller{
     }
 
     public function add_action(){
-      if ($this->session->userdata('name_user') and $this->session->userdata('username')) {
-          if ($this->model_user_access->access_add() == 1) {
-
+      if($this->session->userdata('name_user') and $this->session->userdata('username')){
+        if($this->model_user_access->access_add() == 1){
+  
+                  $config['upload_path']          = './uploads/';
+                  $config['allowed_types']        = 'gif|jpeg|jpg|png|pdf';
+                  $config['max_size']             = '500000';
+                  $config['overwrite']            = 'TRUE';
+                  $fileFotoReplace                = $_FILES['file']['name'];
+                  $fileFoto                       = str_replace(" ","_", $fileFotoReplace);
+                  
+  
+                  $this->load->library('upload', $config);
+                  $this->upload->initialize($config);
+  
+                  $this->upload->do_upload('file');
+  
+                  $gbr = $this->upload->data();
+  
+              $this->db->select_max('id_bk');
+              $this->db->from('barang_keluar_estimasi');
+              $query = $this->db->get();
+              $r = $query->row();
+              $total_id = empty($r->id_bk) ? 1 : $r->id_bk + 1;
+  
+              $onlymonth      = date("m");
+              $onlyyears      = date("Y");
+  
+              $id_bm              = addslashes($this->input->post('id_bm'));
+              $terminal           = 1;
+              $sat_real           = addslashes($this->input->post('sat_real'));
               $po_number          = addslashes($this->input->post('po_number'));
-              $no_transaksi       = addslashes($this->input->post('no_transaksi'));
-              $tgl_transaksi      = addslashes($this->input->post('tgl_transaksi'));
+              $no_transaksi       = "TRX".$onlyyears.$onlymonth.$total_id;
               $jenis_doc          = addslashes($this->input->post('jenis_doc'));
               $jenis_keluar       = addslashes($this->input->post('jenis_keluar'));
-              $pengirim_barang1   = addslashes($this->input->post('pengirim_barang'));
-              $terminal           = addslashes($this->input->post('id_terminal'));
-      
-      
-              $hasil = explode("-",$pengirim_barang1);
-      
-              $pengirim_barang =  $hasil[0];
-              $pengirim_barang_nama = $hasil[1];
-      
+              $pengirim_barang_nama   = addslashes($this->input->post('pengirim_barang'));
+              $pengeluaran_kargo_tgl       = addslashes($this->input->post('pengeluaran_kargo_tgl'));
+              $pengeluaran_kargo_time      = addslashes($this->input->post('pengeluaran_kargo_time'));
+              // echo $pengeluaran_kargo_tgl;
+              // echo "---";
+              // echo $pengeluaran_kargo_time;
+              // die();
+              // $hasil = explode("-",$pengirim_barang1);
+  
+              // $pengirim_barang =  $hasil[0];
+              // $pengirim_barang_nama = $hasil[1];
+  
               $no_dokumen_pabean    = addslashes($this->input->post('no_dokumen_pabean'));
               $no_bukti_penerimaan  = addslashes($this->input->post('no_bukti_penerimaan'));
               $tgl_dokumen_pabean   = addslashes($this->input->post('tgl_dokumen_pabean'));
               $negara_asal    = addslashes($this->input->post('negara_asal'));
-      
+  
               $id_group     = $this->session->userdata('id_group');
               $username     = $this->session->userdata('username');
-              $created_at     = addslashes(date("Y-m-d H:i:s"));
-              
-              $limit_pk = addslashes($this->input->post('limit_pk'));
-
-              /*print_r($data);
-              echo "-------------";
-              echo $limit_pk;
-              die();*/
-
-
-              for ($i = 0; $i < $limit_pk; $i++) {
-                  $keterangan = addslashes($this->input->post('keterangan'.$i));
-                  $qty = addslashes($this->input->post('qty'.$i));
-                  $sat = addslashes($this->input->post('sat'.$i));
-                  $harga = addslashes($this->input->post('harga'.$i));
-                  $total = addslashes($this->input->post('total'.$i));
-                  $terminal_name = addslashes($this->input->post('terminal'.$i));
-                  $tank     = addslashes($this->input->post('tank'.$i));
-                  $cur = addslashes($this->input->post('cur'.$i));
-
-                  $where_awal = array('id_barang' => $keterangan);
-                  $hasil_awal = $this->model_global->edit_data($where_awal, 'barang')->row();
-
-                  $where_terminal = array('id_terminal' => $terminal);
-                  $hasil_terminal = $this->model_global->edit_data($where_terminal, 'ref_terminal')->row();
-
-
-
-                  if ($terminal == "1" && $tank == "Tank 1.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 1.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 2.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 2.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 3.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 3.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 4.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 4.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 5.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 5.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 6.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 6.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 1.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 1.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 2.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 2.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 3.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 3.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 4.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 4.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 5.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 5.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 6.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 6.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 1.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 1.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 2.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 2.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 3.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 3.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 4.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 4.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 5.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 5.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 6.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 6.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+              $created_at   = addslashes(date("Y-m-d H:i:s"));
+          
+  
+          // $keterangan2 = $keterangan2;
+          // $qty        = addslashes($this->input->post('qty_real'));
+          // $sat        = $sat_real;
+          // $harga      = addslashes($this->input->post('harga_satuan_real'));
+          // $total      = addslashes($this->input->post('hasil_real'));
+          // $cur        = addslashes($this->input->post('kurs_real'));
+          // $terminal2  = $terminal;
+          // $tank       = addslashes($this->input->post('tank_real'));
+  
+          /*$data = array(
+                'po_number'     => $po_number,
+                'no_transaksi'    => $no_transaksi,
+                'jenis_doc'       => $jenis_doc,
+                'jenis_pemasukan'   => $jenis_pemasukan,
+                'no_dokumen_pabean'   => $no_dokumen_pabean,
+                'no_bukti_penerimaan'   => $no_bukti_penerimaan,
+                'tgl_dokumen_pabean'  => $tgl_dokumen_pabean,
+                'negara_asal'     => $negara_asal,
+                'created_at'    => $created_at,
+                'id_group'      => $id_group
+                );*/
+  
+          // $limit_pk = addslashes($this->input->post('limit_pk'));
+  
+          /*print_r($data);
+          echo "-------------";
+          echo $limit_pk;
+          die();*/
+  
+  
+                  // $keterangan = addslashes($this->input->post('keterangan'));
+                  // $qty = addslashes($this->input->post('qty'));
+                  // $sat = addslashes($this->input->post('sat'));
+                  // $harga = addslashes($this->input->post('harga'));
+                  // $total = addslashes($this->input->post('total'));
+                  // $terminal = addslashes($this->input->post('terminal'));
+                  // $tank     = addslashes($this->input->post('tank'));
+                  // $cur = addslashes($this->input->post('cur'));
+                  $jenis_keluar   = addslashes($this->input->post('jenis_keluar'));
+                  $limit_pk = addslashes($this->input->post('limit_pk'));
+  
+                  if($jenis_keluar == 3){
+  
+                        for ($i=0; $i < $limit_pk; $i++) {
+  
+                            $keterangan = addslashes($this->input->post('barang' . $i));
+                            $qty        = addslashes($this->input->post('qty' . $i));
+                            $sat        = $sat_real;
+                            $harga      = addslashes($this->input->post('harga' . $i));
+                            $total      = addslashes($this->input->post('total' . $i));
+                            $cur        = addslashes($this->input->post('cur' . $i));
+                            $terminal2  = $terminal;
+                            $tank       = addslashes($this->input->post('tank' . $i));
+                            $biaya_kurs      = addslashes($this->input->post('biayakurs' . $i));
+                            $replacekursdot  = str_replace(".","",$biaya_kurs);
+                            $replacekurskoma = str_replace(",",".",$replacekursdot);
+  
+                            $calculatebiayakurs      = addslashes($this->input->post('calculatebiayakurs' . $i));
+                            $replacecalculatebiayakurskoma = str_replace(".","",$calculatebiayakurs);
+                            $replacecalculatebiayakurskoma = str_replace(",",".",$replacecalculatebiayakurskoma);
+                            
+  
+                            $where_awal = array('id_barang' => $keterangan);
+                            $hasil_awal = $this->model_global->edit_data($where_awal,'barang')->row();
+  
+                            $where_terminal_asal = array('id_terminal' => $terminal2);
+                            $hasil_terminal_asal = $this->model_global->edit_data($where_terminal_asal,'ref_terminal')->row();
+  
+                            $where_terminal_tujuan = array('id_terminal' => $terminal2);
+                            $hasil_terminal_tujuan = $this->model_global->edit_data($where_terminal_tujuan,'ref_terminal')->row();
+  
+                             
+  
+                        if($terminal == "1" && $tank == "Tank 1.A"){
+                            $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 1.B"){
+                            $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 2.A"){
+                            $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 2.B"){
+                            $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();       
+                        }elseif($terminal == "1" && $tank == "Tank 3.A"){
+                            $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 3.B"){
+                            $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 4.A"){
+                            $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 4.B"){
+                            $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 5.A"){
+                            $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 5.B"){
+                            $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 6.A"){
+                            $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 6.B"){
+                            $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                        }
+  
+                            $data_limit_mutasibahan = array(
+                                    'po_number'     => $po_number,
+                                    'kode_barang'   => $keterangan,
+                                    'nama_barang'   => $hasil_awal->nama_brg,
+                                    'satuan'        => $hasil_awal->uom,
+                                    'saldo_awal'    => $cektabel->hasil,
+                                    'pemasukan'     => 0,
+                                    'pengeluaran'   => $qty,
+                                    'saldo_akhir'   => 0,
+                                    'username'          => $username,
+                                    'activation_date'   => $created_at,
+                                    'status'            => 1,
+                                    'terminal_terapung' => $hasil_terminal_asal->terminal,
+                                    'terminal_tank'     => $tank
+  
+                            );
+                            $this->model_global->input_data($data_limit_mutasibahan,'mutasi_bahan_estimasi');
+                            $id_mutasi_bahan = $this->db->insert_id();
+  
+                            $data_limit_pk = array(
+                              'po_number'     => $po_number,
+                              'no_transaksi'    => $no_transaksi,
+                              'tgl_transaksi'    => $created_at,
+                              'jenis_doc'       => $jenis_doc,
+                              'jenis_keluar'    => $jenis_keluar,
+                              'no_dokumen_pabean'   => $no_dokumen_pabean,
+                              'no_bukti_pengeluaran'  => $no_bukti_penerimaan,
+                              'tgl_dokumen_pabean'  => $tgl_dokumen_pabean,
+                              'negara_tujuan'     => $negara_asal,
+                              'created_at'        => $created_at,
+                              'id_group'          => $id_group,
+                              'id_client'         => $pengirim_barang,
+                              'nama_brg'          => $hasil_awal->nama_brg,
+                              'id_barang'         => $keterangan,
+                              'jumlah'            => $qty,
+                              'id_satuan'         => $sat,
+                              'nilai_barang'      => $total,
+                              'id_mata_uang'      => $cur,
+                              'pembeli_penerima'  => $pengirim_barang_nama,
+                              'terminal_terapung' => $hasil_terminal_asal->terminal,
+                              'terminal_tank'     => $tank,
+                              'harga'             => $harga,
+                              'file'              => $fileFoto,
+                              'pengeluaran_kargo_tgl'        => $pengeluaran_kargo_tgl,
+                              'pengeluaran_kargo_time'       => $pengeluaran_kargo_time,
+                              'biaya_kurs'        => $replacekurskoma,
+                              'total_calculate'   => $replacecalculatebiayakurskoma,
+                              'status'            => 1
+  
+                            );
+                            $this->model_global->input_data($data_limit_pk,'barang_keluar_estimasi');
+                            
+  
+                            if($terminal == "1" && $tank == "Tank 1.A"){
+                                $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 1.B"){
+                                $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 2.A"){
+                                $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 2.B"){
+                                $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();       
+                            }elseif($terminal == "1" && $tank == "Tank 3.A"){
+                                $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 3.B"){
+                                $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 4.A"){
+                                $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 4.B"){
+                                $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 5.A"){
+                                $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 5.B"){
+                                $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 6.A"){
+                                $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }elseif($terminal == "1" && $tank == "Tank 6.B"){
+                                $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal_asal->terminal' ")->row();
+                            }
+  
+  
+                            $data_mutasi = array(
+                                        'saldo_akhir'    => $cektabel->hasil
+                                    );
+  
+                            $where_mutasi = array(
+                                        'id_mutasi_bahan'   => $id_mutasi_bahan
+                                    );
+                            $this->model_global->update_data($where_mutasi,$data_mutasi,'mutasi_bahan_estimasi');            
+                            $data_update_notf = array(
+                                  'status'       => 1
+                            );
+  
+                            $where_update_notf = array(
+                                  'id_bm'   => $id_bm
+                            );
+  
+                            $this->model_global->update_data($where_update_notf, $data_update_notf, 'tr_notif');
+                                
+                            }
+  
+                  }else{
+  
+                    for ($i = 0; $i < $limit_pk; $i++) {
+                      
+                      $keterangan = addslashes($this->input->post('barang' . $i));
+                      $qty        = addslashes($this->input->post('qty' . $i));
+                      $sat        = $sat_real;
+                      $harga      = addslashes($this->input->post('harga' . $i));
+                      $total      = addslashes($this->input->post('total' . $i));
+                      $cur        = addslashes($this->input->post('cur' . $i));
+                      $terminal2  = $terminal;
+                      $tank       = addslashes($this->input->post('tank' . $i));
+                      $biaya_kurs      = addslashes($this->input->post('biayakurs' . $i));
+                      $replacekursdot  = str_replace(".","",$biaya_kurs);
+                      $replacekurskoma = str_replace(",",".",$replacekursdot);
+  
+                      $calculatebiayakurs      = addslashes($this->input->post('calculatebiayakurs' . $i));
+                      $replacecalculatebiayakurskoma  = str_replace(",","",$calculatebiayakurs);
+  
+                      $where_awal = array('id_barang' => $keterangan);
+                      $hasil_awal = $this->model_global->edit_data($where_awal,'barang')->row();
+  
+                      $where_terminal = array('id_terminal' => $terminal);
+                      $hasil_terminal = $this->model_global->edit_data($where_terminal,'ref_terminal')->row();
+  
+                      if($terminal == "1" && $tank == "Tank 1.A"){
+                        $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 1.B"){
+                        $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 2.A"){
+                        $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 2.B"){
+                        $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 3.A"){
+                        $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 3.B"){
+                        $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 4.A"){
+                        $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 4.B"){
+                        $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 5.A"){
+                        $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 5.B"){
+                        $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 6.A"){
+                        $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }elseif($terminal == "1" && $tank == "Tank 6.B"){
+                        $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                      }
+  
+                        $data_limit_mutasi = array(
+                            'po_number'   => $po_number,
+                            'kode_barang'   => $keterangan,
+                            'nama_barang'   => $hasil_awal->nama_brg,
+                            'satuan'    => $hasil_awal->uom,
+                            'saldo_awal'  => $cektabel->hasil,
+                            'pemasukan'   => 0,
+                            'pengeluaran'   => $qty,
+                            'saldo_akhir'   => 0,
+                            'username'      => $username,
+                            'activation_date'    => $created_at,
+                            'status'      => 1,
+                            'asal_terminal_terapung' => $hasil_terminal->terminal,
+                            'asal_terminal_tank'   => $tank
+  
+                        );
+                        $this->model_global->input_data($data_limit_mutasi,'mutasi_fg_estimasi');
+  
+                        $id_mutasi_fg = $this->db->insert_id();
+  
+                        $data_limit_pk = array(
+                              'po_number'     => $po_number,
+                              'no_transaksi'    => $no_transaksi,
+                              'jenis_doc'       => $jenis_doc,
+                              'jenis_keluar'    => $jenis_keluar,
+                              'no_dokumen_pabean'   => $no_dokumen_pabean,
+                              'no_bukti_pengeluaran'  => $no_bukti_penerimaan,
+                              'tgl_dokumen_pabean'  => $tgl_dokumen_pabean,
+                              'negara_tujuan'     => $negara_asal,
+                              'created_at'        => $created_at,
+                              'id_group'          => $id_group,
+                              'id_client'         => $pengirim_barang,
+                              'nama_brg'          => $hasil_awal->nama_brg,
+                              'id_barang'         => $keterangan,
+                              'jumlah'            => $qty,
+                              'id_satuan'         => $sat,
+                              'nilai_barang'      => $total,
+                              'id_mata_uang'      => $cur,
+                              'no_transaksi'      => $no_transaksi,
+                              'pembeli_penerima'  => $pengirim_barang_nama,
+                              'terminal_terapung' => $hasil_terminal->terminal,
+                              'terminal_tank'     => $tank,
+                              'harga'             => $harga,
+                              'file'              => $fileFoto,
+                              'pengeluaran_kargo_tgl'        => $pengeluaran_kargo_tgl,
+                              'pengeluaran_kargo_time'       => $pengeluaran_kargo_time,
+                              'biaya_kurs'        => $replacekurskoma,
+                              'total_calculate'   => $replacecalculatebiayakurskoma,
+                              'status'            => 1
+  
+                        );
+                        $this->model_global->input_data($data_limit_pk,'barang_keluar_estimasi');
+  
+                        if($terminal == "1" && $tank == "Tank 1.A"){
+                          $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 1.B"){
+                          $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 2.A"){
+                          $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 2.B"){
+                          $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 3.A"){
+                          $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 3.B"){
+                          $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 4.A"){
+                          $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 4.B"){
+                          $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 5.A"){
+                          $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 5.B"){
+                          $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 6.A"){
+                          $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }elseif($terminal == "1" && $tank == "Tank 6.B"){
+                          $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang_fg where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
+                        }
+  
+                        $where_akhir = array('id_barang' => $keterangan);
+                        $hasil_akhir = $this->model_global->edit_data($where_akhir,'barang')->row();
+  
+                        $data_mutasi = array(
+                            'saldo_akhir'     => $cektabel->hasil
+                          );
+  
+                        $where_mutasi = array(
+                            'id_mutasi_fg'  => $id_mutasi_fg
+                          );
+  
+  
+                        $this->model_global->update_data($where_mutasi,$data_mutasi,'mutasi_fg_estimasi');
+  
+                        $data_update_notf = array(
+                              'status'       => 1
+                        );
+  
+                        $where_update_notf = array(
+                              'id_bm'   => $id_bm
+                        );
+  
+                        $this->model_global->update_data($where_update_notf, $data_update_notf, 'tr_notif');
+  
+                    }    
+  
                   }
-
-
-
-                  $data_limit_mutasi = array(
-                    'po_number'   => $po_number,
-                    'kode_barang'   => $keterangan,
-                    'nama_barang'   => $hasil_awal->nama_brg,
-                    'satuan'    => $sat,
-                    'saldo_awal'  => $cektabel->hasil,
-                    'pemasukan'   => 0,
-                    'pengeluaran'   => $qty,
-                    'saldo_akhir'   => 0,
-                    'username'      => $username,
-                    'activation_date'    => $created_at,
-                    'status'      => 1,
-                    'asal_terminal_terapung' => $hasil_terminal->terminal,
-                    'asal_terminal_tank'   => $tank
-                  );
-                  $this->model_global->input_data($data_limit_mutasi, 'mutasi_fg');
-                  $mutasi_fg = $this->db->insert_id();
-
-                  $data_limit_pk = array(
-                    'po_number'     => $po_number,
-                    'no_transaksi'    => $no_transaksi,
-                    'jenis_doc'       => $jenis_doc,
-                    'tgl_transaksi'       => $tgl_transaksi,
-                    'jenis_keluar'    => $jenis_keluar,
-                    'no_dokumen_pabean'   => $no_dokumen_pabean,
-                    'no_bukti_pengeluaran'  => $no_bukti_penerimaan,
-                    'tgl_dokumen_pabean'  => $tgl_dokumen_pabean,
-                    'negara_tujuan'     => $negara_asal,
-                    'created_at'    => $created_at,
-                    'id_group'      => $id_group,
-                    'id_client'     => $pengirim_barang,
-                    'nama_brg'      => $hasil_awal->nama_brg,
-                    'id_barang'     => $keterangan,
-                    'jumlah'      => $qty,
-                    'id_satuan'     => $sat,
-                    'nilai_barang'    => $total,
-                    'id_mata_uang'    => $cur,
-                    'no_transaksi'    => $no_transaksi,
-                    'pembeli_penerima'  => $pengirim_barang_nama,
-                    'terminal_terapung' => $hasil_terminal->terminal,
-                    'terminal_tank'   => $tank
-                  );
-                  $this->model_global->input_data($data_limit_pk, 'barang_keluar');
-
-                  if ($terminal == "1" && $tank == "Tank 1.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 1.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 2.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 2.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 3.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 3.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 4.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 4.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 5.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 5.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 6.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "1" && $tank == "Tank 6.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 1.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 1.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 2.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 2.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 3.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 3.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 4.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 4.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 5.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 5.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 6.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "2" && $tank == "Tank 6.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 1.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank1  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 1.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank2  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 2.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank3  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 2.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank4  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 3.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank5  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 3.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank6  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 4.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank7  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 4.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank8  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 5.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank9  as hasil FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 5.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank10 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 6.A") {
-                      $cektabel = $this->db->query("SELECT stok_tank11 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  } elseif ($terminal == "3" && $tank == "Tank 6.B") {
-                      $cektabel = $this->db->query("SELECT stok_tank12 as hasil  FROM barang where id_barang = '$keterangan' and terminal_terapung = '$hasil_terminal->terminal' ")->row();
-                  }
-
-                  /*$where_akhir = array('id_barang' => $keterangan);
-                  $hasil_akhir = $this->model_global->edit_data($where_akhir,'barang')->row();*/
-
-                  $data_mutasi = array(
-                      'saldo_akhir'       => $cektabel->hasil
-                  );
-
-                  $where_mutasi = array(
-                      'id_mutasi_fg'   => $id_mutasi_fg
-                  );
-
-
-                  $this->model_global->update_data($where_mutasi, $data_mutasi, 'mutasi_fg');
-              }
-
-
-
-              //log
-              $assign_type= '';
-              activity_log("Pengeluaran -> Pemasukan Bahan Baku", "Menambah data Pemasukan Bahan Baku", $id_group, $assign_type);
-              $this->session->set_flashdata('succeed','Sukses, Satu data telah berhasil disimpan.');
-              redirect('PengeluaranRBB');
-          } else {
-              $this->load->view('Layouts/error-404');
-          }
-      } else {
-          session_destroy();
-          redirect('dashboard');
+  
+          //log
+  
+          $assign_type= '';
+          activity_log("Pengeluaran -> Pemasukan Bahan Baku", "Menambah data Pemasukan Bahan Baku", $id_group, $assign_type);
+          $this->session->set_flashdata('succeed','Sukses, Satu data telah berhasil disimpan.');
+          redirect('PengeluaranRBB');
+        }else{
+          $this->load->view('Layouts/error-404');
+        }
+      }else{
+        session_destroy();
+        redirect('dashboard');
       }
   }
 
@@ -637,8 +788,7 @@ class PengeluaranRBB  extends CI_Controller{
             $onlyyears      = date("Y");
 
             $id_bm              = addslashes($this->input->post('id_bm'));
-            $keterangan         = addslashes($this->input->post('id_barang_real'));
-            $keterangan2        = addslashes($this->input->post('keterangan2'));
+            $keterangan        = addslashes($this->input->post('barang'));
             $terminal           = addslashes($this->input->post('terminal_real'));
             $sat_real           = addslashes($this->input->post('sat_real'));
             $po_number          = addslashes($this->input->post('po_number'));
@@ -712,7 +862,7 @@ class PengeluaranRBB  extends CI_Controller{
 
                       for ($i=0; $i < $limit_pk; $i++) {
 
-                          $keterangan2 = $keterangan2;
+                          $keterangan = $keterangan;
                           $qty        = addslashes($this->input->post('qty' . $i));
                           $sat        = $sat_real;
                           $harga      = addslashes($this->input->post('harga' . $i));
