@@ -503,6 +503,7 @@ $(document).on('keyup', '[id^=biayakurs]', function() {
       });
 
       for(var i=0;  i<=table.rows.length; i++) {
+        document.getElementsByClassName("classBarang")[i].name = "barang"+i;
         document.getElementsByClassName("classQty")[i].name = "qty"+i;
         document.getElementsByClassName("classTank")[i].name = "tank"+i;
         document.getElementsByClassName("classHarga")[i].name = "harga"+i;

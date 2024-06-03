@@ -352,10 +352,8 @@ class PemasukanRBB  extends CI_Controller
                 $onlyyears      = date("Y");
 
                 $id_bm              = addslashes($this->input->post('id_bm'));
-                $keterangan         = addslashes($this->input->post('id_barang_real'));
-                $keterangan2        = addslashes($this->input->post('keterangan2'));
-                $terminal           = addslashes($this->input->post('terminal_real'));
-                $sat_real           = addslashes($this->input->post('sat_real'));
+                $terminal           = 1;
+                $po_number          = addslashes($this->input->post('po_number'));
                 $po_number          = addslashes($this->input->post('po_number'));
                 $no_transaksi       = "TRX".$onlyyears.$onlymonth.$total_id;
                 $jenis_doc          = addslashes($this->input->post('jenis_doc'));
@@ -395,7 +393,7 @@ class PemasukanRBB  extends CI_Controller
 
                     for ($i = 0; $i < $limit_pk; $i++) {
                     
-                    $keterangan2 = $keterangan2;
+                    $keterangan2 = addslashes($this->input->post('barang' . $i));
                     $qty        = addslashes($this->input->post('qty' . $i));
                     $sat        = $sat_real;
                     $harga      = addslashes($this->input->post('harga' . $i));
@@ -496,9 +494,9 @@ class PemasukanRBB  extends CI_Controller
 
                 $data_limit_mutasi = array(
                     'po_number'     => $po_number,
-                    'kode_barang'   => $keterangan,
+                    'kode_barang'   => $keterangan2,
                     'nama_barang'   => $hasil_awal->nama_brg,
-                    'satuan'        => $sat,
+                    'satuan'        => $hasil_awal->uom,
                     'saldo_awal'    => $cektabel->hasil,
                     'pemasukan'     => $qty,
                     'pengeluaran'   => 0,
@@ -526,9 +524,9 @@ class PemasukanRBB  extends CI_Controller
                     'id_group'          => $id_group,
                     'id_client'         => $pengirim_barang,
                     'nama_brg'          => $hasil_awal->nama_brg,
-                    'id_barang'         => $keterangan,
+                    'id_barang'         => $keterangan2,
                     'jumlah'            => $qty,
-                    'id_satuan'         => $sat,
+                    'id_satuan'         => $hasil_awal->uom,
                     'nilai_barang'      => $total,
                     'id_mata_uang'      => $cur,
                     'tgl_transaksi'     => $created_at,
