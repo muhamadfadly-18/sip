@@ -158,10 +158,6 @@
                 </div>
                 
                  <br>
-              <div class="form-group">
-                <label class="col-sm-6 control-label" style="color: red;text-align: left;">HS Code : </label>
-                <label class="col-sm-6 control-label" style="color: red;text-align: left;">Qty :</label>
-              </div>
               <div class="col-md-12 mb-3 table-container">
               <table id="" class="table table-hover table-bordered dataTable table-striped width-full overf">
               <thead>
@@ -233,7 +229,7 @@
               </div>
 
                 <div class="form-group">
-                  <div class="col-sm-8">
+                  <div class="col-sm-8" style="margin-top:10px">
                     <input class="btn btn-primary" type="submit" value="Simpan">
                     <button class="btn btn-default btn-outline" type="reset">Reset</button>
                   </div>

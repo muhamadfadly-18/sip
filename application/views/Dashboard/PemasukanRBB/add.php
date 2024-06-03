@@ -172,10 +172,7 @@
                   </div>
                 </div>
                 <br>
-                <div class="form-group">
-                  <label class="col-sm-6 control-label" style="color: red;text-align: left;">HS Code : </label>
-                  <label class="col-sm-6 control-label" style="color: red;text-align: left;">Qty : </label>
-                </div>
+            
                 <div class="col-md-12 mb-3 table-container">
               
               <table id="show_table_ap" class="table table-hover table-bordered dataTable table-striped width-full overf">
@@ -248,11 +245,11 @@
                   </tfoot>
  -->              </table>
                     </div>
-              <br>
               
-                <div class="form-group">
-                  <div class="col-sm-8">
-                    <input class="btn btn-primary" type="submit" value="Simpan">
+              
+                <div class="form-group ">
+                  <div class="col-sm-8" style="margin-top:10px">
+                    <input class="btn btn-primary " type="submit" value="Simpan">
                     <button class="btn btn-default btn-outline" type="reset">Reset</button>
                   </div>
                 </div>
@@ -326,7 +323,7 @@
     cell1.innerHTML = '<a href="javascript:void(0);" class="btn btn-sm btn-default" style="align:center;" onclick="deleteRowPK(this)"><i class="fa fa-remove"></i></a>';
   
     cell2.innerHTML = '<input type="text" class="form-control classBarang" class="form-control" id="barang'+ a +'"  >';
-    cell3.innerHTML = '<input type="text" class="form-control classQty" class="form-control" id="qty'+ a +'"  >';
+    cell3.innerHTML = '<input type="text" class="form-control classQty" class="form-control" id="qty'+ a +'" value="0" >';
     cell4.innerHTML = '<select id="tank" class="form-control selectX classTank" style="width:100%;">'+
                       '<option value="">Pilih</option>'+
                       <?php
@@ -344,9 +341,9 @@
                         '<option value="<?php echo $value->id_kurs; ?>"><?php echo $value->mata_uang; ?></option>'+
                       <?php } ?>
                       '</select>';
-    cell6.innerHTML = '<input type="text" class="form-control classHarga" style="width:100%;" class="form-control" id="harga'+ a +'" ><input type="text" class="form-control classHargaUrutan" style="width:100%;display:none" class="form-control" id="urutan_diem" value="'+ j +'">';
+    cell6.innerHTML = '<input type="text" class="form-control classHarga" style="width:100%;" class="form-control" id="harga'+ a +'"  value="0"><input type="text" class="form-control classHargaUrutan" style="width:100%;display:none" class="form-control" id="urutan_diem" value="'+ j +'">';
     cell7.innerHTML = '<input type="text" class="form-control classTotalShow" style="width:100%;" class="form-control" id="total_show'+ a +'" readonly><input type="text" class="form-control classTotal" style="width:100%;display:none" class="form-control" id="total'+ a +'" >';
-    cell8.innerHTML = '<input type="text" class="form-control classBiayaKurs" id="biayakurs'+ a +'" ><a href="https://www.bi.go.id/id/statistik/informasi-kurs/transaksi-bi/default.aspx" target="_blank"> Cek Nilai Biaya Kurs</a> ';
+    cell8.innerHTML = '<input type="text" class="form-control classBiayaKurs" id="biayakurs'+ a +'" value="0"><a href="https://www.bi.go.id/id/statistik/informasi-kurs/transaksi-bi/default.aspx" target="_blank"> Cek Nilai Biaya Kurs</a> ';
     cell9.innerHTML = '<input type="text" class="form-control classCalculateBiayaKursShow" id="calculatebiayakursshow'+ a +'" ><input type="text" class="form-control classCalculateBiayaKurs" id="calculatebiayakurs'+ a +'" style="width:100%;display:none">';
 
     var calculated_total_sum = 0;
