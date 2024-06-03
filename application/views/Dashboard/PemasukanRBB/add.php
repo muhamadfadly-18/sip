@@ -383,7 +383,28 @@
     var getqty = Number(document.getElementById("totalhasil3").value);
     var calculate = qty_show + getqty;
 
-    
+    var result_real   = qty_show * harga_show;
+                let text          = result_real.toString();
+                document.getElementById("total_show" + a).value = text.number_format2();
+                document.getElementById("total" + a).value = result_real;
+
+                var calculated_total_sum_qty = 0;
+                  $("#myTablePK .classQty").each(function (){
+                      var get_textbox_value = $(this).val().replace(",", "");
+                      calculated_total_sum_qty += parseFloat(get_textbox_value);    
+                  });
+
+                  var calculated_total_sum_total_harga = 0;
+                  $("#myTablePK .classTotal").each(function (){
+                      var get_textbox_value = $(this).val().replace(".", "");
+                      var get_textbox_value = get_textbox_value.replace(".", "");
+                      var get_textbox_value = get_textbox_value.replace(".", "");
+                      var get_textbox_value = get_textbox_value.replace(",", ".");
+                      calculated_total_sum_total_harga += parseFloat(get_textbox_value);    
+                  });
+
+                  document.getElementById("totalshowqty").value = calculated_total_sum_qty;
+                  document.getElementById("totalshowTH").value = calculated_total_sum_total_harga.toString().number_format2();
     });
   
 

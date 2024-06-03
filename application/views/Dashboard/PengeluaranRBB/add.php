@@ -15,7 +15,7 @@
       border-collapse: collapse;
     }
   
-    tr, td {
+    td, td {
       padding: 8px;
       text-align: center;
     }
@@ -170,13 +170,13 @@
                     <a  class="btn btn-primary addRowPK" onclick="addPK()"><i class="fa fa-plus" aria-hidden="true"></i></a>
                   </td>
 
-                  <td class="JudulHeadr" style="padding-left: 5px; border-bottom: 1px solid black;">Tank</td>
-                  <td class="JudulHeadr" style="padding-left: 5px;  border-bottom: 1px solid black;">Qty</td>
-                  <td class="JudulHeadr" style="padding-left: 5px;  border-bottom: 1px solid black;">Mata Uang</td>
-                  <td class="JudulHeadr" style="padding-left: 5px;  border-bottom: 1px solid black;">Harga Satuan Barang (origin price)</td>
-                  <td class="JudulHeadr" style="padding-left: 5px;  border-bottom: 1px solid black;">Total Nilai Barang (origin price)</td>
-                  <td class="JudulHeadr" style="padding-left: 5px;  border-bottom: 1px solid black;">Biaya Kurs</td>
-                  <td class="JudulHeadr" style="padding-left: 5px;  border-bottom: 1px solid black;">Calculate Biaya Kurs (covertion price)</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Tank</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Qty</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Mata Uang</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Harga Satuan Barang (origin price)</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Total Nilai Barang (origin price)</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Biaya Kurs</td>
+                  <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Calculate Biaya Kurs (covertion price)</td>
                  <!--  <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Bulan</td>
                   <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Tahun</td> -->
                 </tr>
