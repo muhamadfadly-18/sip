@@ -393,7 +393,7 @@ class PemasukanRBB  extends CI_Controller
 
                     for ($i = 0; $i < $limit_pk; $i++) {
                     
-                    $keterangan2 = addslashes($this->input->post('barang' . $i));
+                    $keterangan = addslashes($this->input->post('barang' . $i));
                     $qty        = addslashes($this->input->post('qty' . $i));
                     $sat        = $sat_real;
                     $harga      = addslashes($this->input->post('harga' . $i));
@@ -494,7 +494,7 @@ class PemasukanRBB  extends CI_Controller
 
                 $data_limit_mutasi = array(
                     'po_number'     => $po_number,
-                    'kode_barang'   => $keterangan2,
+                    'kode_barang'   => $keterangan,
                     'nama_barang'   => $hasil_awal->nama_brg,
                     'satuan'        => $hasil_awal->uom,
                     'saldo_awal'    => $cektabel->hasil,
@@ -524,7 +524,7 @@ class PemasukanRBB  extends CI_Controller
                     'id_group'          => $id_group,
                     'id_client'         => $pengirim_barang,
                     'nama_brg'          => $hasil_awal->nama_brg,
-                    'id_barang'         => $keterangan2,
+                    'id_barang'         => $keterangan,
                     'jumlah'            => $qty,
                     'id_satuan'         => $hasil_awal->uom,
                     'nilai_barang'      => $total,
