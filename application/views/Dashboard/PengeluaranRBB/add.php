@@ -86,9 +86,9 @@
                     <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control box-shadow">
                   </div>
                   <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo : </label>
-            <div class="col-sm-4">
-                <input type="datetime-local" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" id="pengeluaran_kargo_tgl" class="form-control box-shadow">
-            </div>
+                  <div class="col-sm-4">
+                    <input type="datetime-local" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" class="form-control box-shadow">
+                  </div>
                   <!-- <div class="col-sm-2">
                     <input type="time" name="pengeluaran_kargo_time" class="form-control" placeholder="" >
                   </div> -->
@@ -142,7 +142,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label" style="font-family: Arial;">Penerima Barang : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" name="pengirim_barang" placeholder="Nama Pengirim Barang" class="form-control box-shadow">
+                    <input type="text" autocomplete="off" placeholder="Nama Pengirim Barang" name="pengirim_barang" class="form-control box-shadow">
                     <!-- <select data-plugin="select2" name='pengirim_barang' id="pengirim_barang" class="form-control">
                       <option> Pilih pengirim </option>
                                   <?php
@@ -196,12 +196,12 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">File : </label>
+                  <label class="col-sm-2 control-label">File : </label>
                   <div class="col-sm-4">
-                    <input class="form-control box-shadow" id="file" name="file" type="file">
-                    <span style="color: red;font-size: 10px;">* Masukan Dokumen & lampirannya dalam Bentuk Format pdf / image.</span>
+                    <input class="form-control" id="file" name="file" type="file">
+                    <span style="color: red;font-size: 10px;">* Masukan Dokumen Pabean & lampirannya dalam Bentuk Format pdf / image.</span>
                   </div>
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">Negara Tujuan : </label>
+                  <label class="col-sm-2 control-label">Negara Asal Barang : </label>
                   <div class="col-sm-4">
                     <select data-plugin="select2" name='countries' id="" class="form-control">
                       <option value="0">-- Pilih Negara Asal Barang --</option>
@@ -212,8 +212,8 @@
                       ?>
                     </select>
                   </div>
-                </div>
 
+                </div>
                 <br>
                 <div class="col-md-12 mb-3 table-container">
                   <table id="" class="table table-hover table-bordered dataTable table-striped width-full overf">
