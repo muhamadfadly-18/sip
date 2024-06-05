@@ -365,7 +365,7 @@ class PemasukanRBB  extends CI_Controller
                 $negara_asal        = addslashes($this->input->post('countries'));
                 $nama_kapal         = addslashes($this->input->post('nama_kapal'));
                 $penerimaan_kargo_tgl         = addslashes($this->input->post('penerimaan_kargo_tgl'));
-                $penerimaan_kargo_time        = addslashes($this->input->post('penerimaan_kargo_time'));
+                // $penerimaan_kargo_time        = addslashes($this->input->post('penerimaan_kargo_time'));
 
                 $id_group       = $this->session->userdata('id_group');
                 $username       = $this->session->userdata('username');
@@ -538,7 +538,7 @@ class PemasukanRBB  extends CI_Controller
                     'biaya_kurs'        => $replacekurskoma,
                     'total_calculate'   => $replacecalculatebiayakurskoma,
                     'penerimaan_kargo_tgl'   => $penerimaan_kargo_tgl,
-                    'penerimaan_kargo_time'  => $penerimaan_kargo_time,
+                    // 'penerimaan_kargo_time'  => $penerimaan_kargo_time,
                     'status'            => 1
 
                 );
