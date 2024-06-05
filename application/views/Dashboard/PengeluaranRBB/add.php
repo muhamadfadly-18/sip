@@ -1,8 +1,4 @@
 <style>
-  .ui-datepicker-buttonpane .ui-datepicker-current {
-    float: left;
-  }
-
   .table-container {
     width: 100%;
     overflow-x: auto;
@@ -23,6 +19,19 @@
   td {
     padding: 8px;
     text-align: center;
+  }
+
+  .box-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .box-shadow:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 255, 0.4);
+  }
+
+  .ui-datepicker-buttonpane .ui-datepicker-current {
+    float: left;
   }
 </style>
 
@@ -72,14 +81,14 @@
                 <input type="text" autocomplete="off" name="totalhasil" id="totalhasil" class="form-control" value="" style="display: none;">
 
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">No PO : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">No PO : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control">
+                    <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control box-shadow">
                   </div>
-                  <label class="col-sm-2 control-label">Pengeluaran Kargo : </label>
-                  <div class="col-sm-4">
-                    <input type="datetime-local" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" class="form-control">
-                  </div>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo : </label>
+            <div class="col-sm-4">
+                <input type="datetime-local" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" id="pengeluaran_kargo_tgl" class="form-control box-shadow">
+            </div>
                   <!-- <div class="col-sm-2">
                     <input type="time" name="pengeluaran_kargo_time" class="form-control" placeholder="" >
                   </div> -->
@@ -92,9 +101,9 @@
                   <div class="col-sm-2">
                     <input type="date" name="tgl_transaksi" class="form-control" placeholder="Tanggal Transaksi" value="<?= date('Y-m-d'); ?>" value="<?= date('Y-m-d'); ?>">
                   </div> -->
-                  <label class="col-sm-2 control-label">Jenis Keluar : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Jenis Keluar : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='jenis_keluar' id="jenis_keluar" class="form-control">
+                    <select data-plugin="select2" name='jenis_keluar' id="jenis_keluar" class="form-control box-shadow">
                       <option> Pilih Jenis Keluar </option>
                       <?php
 
@@ -105,9 +114,9 @@
 
                     </select>
                   </div>
-                  <label class="col-sm-2 control-label">Jenis Dokumen : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Jenis Dokumen : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='jenis_doc' id="jenis_doc" class="form-control">
+                    <select data-plugin="select2" name='jenis_doc' id="jenis_doc" class="form-control box-shadow">
                       <!-- <option value=''>None</option>-->
                       <option> Pilih Jenis Dokumen </option>
                       <?php
@@ -121,19 +130,19 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">Bukti Pengeluaran : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Bukti Pengeluaran : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="Bukti Penerimaan" name="no_bukti_penerimaan" class="form-control">
+                    <input type="text" autocomplete="off" placeholder="Bukti Penerimaan" name="no_bukti_penerimaan" class="form-control box-shadow">
                   </div>
-                  <label class="col-sm-2 control-label">No Dokumen : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">No Dokumen : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="No Dokumen" name="no_dokumen_pabean" class="form-control" value="">
+                    <input type="text" autocomplete="off" placeholder="No Dokumen" name="no_dokumen_pabean" class="form-control box-shadow" value="">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">Penerima Barang : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Penerima Barang : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="Nama Pengirim Barang" name="pengirim_barang" class="form-control">
+                    <input type="text" autocomplete="off" name="pengirim_barang" placeholder="Nama Pengirim Barang" class="form-control box-shadow">
                     <!-- <select data-plugin="select2" name='pengirim_barang' id="pengirim_barang" class="form-control">
                       <option> Pilih pengirim </option>
                                   <?php
@@ -145,11 +154,9 @@
 
                     </select> -->
                   </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Tanggal Dokumen : </label>
-                    <div class="col-sm-4">
-                      <input type="text" id="tgl_dokumen_pabean" name="tgl_dokumen_pabean" class="form-control" placeholder="Tanggal Dokumen" value="">
-                    </div>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Tanggal Dokumen : </label>
+                  <div class="col-sm-4">
+                    <input type="text" id="tgl_dokumen_pabean" name="tgl_dokumen_pabean" class="form-control box-shadow" placeholder="Tanggal Dokumen" value="">
                   </div>
 
                   <script>
@@ -189,15 +196,15 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">File : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">File : </label>
                   <div class="col-sm-4">
-                    <input class="form-control" id="file" name="file" type="file">
+                    <input class="form-control box-shadow" id="file" name="file" type="file">
                     <span style="color: red;font-size: 10px;">* Masukan Dokumen & lampirannya dalam Bentuk Format pdf / image.</span>
                   </div>
-                  <label class="col-sm-2 control-label">Negara Tujuan: </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Negara Tujuan : </label>
                   <div class="col-sm-4">
                     <select data-plugin="select2" name='countries' id="" class="form-control">
-                      <option value="0">-- Pilih Negara Tujuan Barang --</option>
+                      <option value="0">-- Pilih Negara Asal Barang --</option>
                       <?php
                       foreach ($bendera  as $value) {   ?>
                         <option value="<?= $value->id_negara_asal ?>"><?= $value->nama_negara  ?></option>
@@ -205,32 +212,33 @@
                       ?>
                     </select>
                   </div>
+                </div>
 
-                  <br>
-                  <div class="col-md-12 mb-3 table-container">
-                    <table id="" class="table table-hover table-bordered dataTable table-striped width-full overf">
-                      <thead>
-                        <tr style="text-align: center;">
-                          <td style=" border-bottom: 1px solid black;">
-                            <a class="btn btn-primary addRowPK" onclick="addPK()"><i class="fa fa-plus" aria-hidden="true"></i></a>
-                          </td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Barang</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Tank</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Qty</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Mata Uang</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Harga Satuan Barang (origin price)</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Total Nilai Barang (origin price)</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Biaya Kurs</td>
-                          <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Calculate Biaya Kurs (covertion price)</td>
-                          <!--  <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Bulan</td>
+                <br>
+                <div class="col-md-12 mb-3 table-container">
+                  <table id="" class="table table-hover table-bordered dataTable table-striped width-full overf">
+                    <thead>
+                      <tr style="text-align: center;">
+                        <td style=" border-bottom: 1px solid black;">
+                          <a class="btn btn-primary addRowPK" onclick="addPK()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                        </td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Barang</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Tank</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Qty</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Mata Uang</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Harga Satuan Barang (origin price)</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Total Nilai Barang (origin price)</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Biaya Kurs</td>
+                        <td class="JudulHeadr" style="padding-left: 5px; min-width: 150px; border-bottom: 1px solid black;">Calculate Biaya Kurs (covertion price)</td>
+                        <!--  <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Bulan</td>
                   <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Tahun</td> -->
-                        </tr>
-                      </thead>
-                      <tbody id="myTablePK">
-                        <!-- <input type="text" name="keterangan" style="display: none;" value="">
+                      </tr>
+                    </thead>
+                    <tbody id="myTablePK">
+                      <!-- <input type="text" name="keterangan" style="display: none;" value="">
                         <input type="text" name="qty" style="display: none;" value="">
                         <input type="text" name="terminal" style="display: none;" value=""> -->
-                        <!-- <tr style="text-align: center;">
+                      <!-- <tr style="text-align: center;">
                     <td><input type="text" autocomplete="off" name="" class="form-control" readonly="readonly" value=""><input type="text" autocomplete="off" id="qty_real" name="qty_real" class="form-control" readonly="readonly" value="" style="display: none;"></td>
                     <td>
                       <select data-plugin="select2" id="tank_real" name="tank_real" class="form-control" >
@@ -256,34 +264,34 @@
                     <td><input type="text" id="harga_satuan_real" name="harga_satuan_real" class="form-control"></td>
                     <td><input type="text" autocomplete="off" id="hasil_real_show" name="hasil_real_show" class="form-control" readonly="readonly"><input type="text" autocomplete="off" id="hasil_real" name="hasil_real" class="form-control" style="display: none;"></td>
                  </tr> -->
-                      </tbody>
-                      <tfoot>
-                        <tr style="text-align: center;">
-                          <td class="JudulHeadr" style="padding-left: 5px;"></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; ">Total</td>
-                          <td class="JudulHeadr" style="padding-left: 5px;"></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowqty" class="form-control" value="0"></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; "></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowharga" class="form-control" value="0"></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowTH" class="form-control" value="0"></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowBK" class="form-control" value="0"></td>
-                          <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowCBK" class="form-control" value="0"></td>
-                          <!--  <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Bulan</td>
+                    </tbody>
+                    <tfoot>
+                      <tr style="text-align: center;">
+                        <td class="JudulHeadr" style="padding-left: 5px;"></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; ">Total</td>
+                        <td class="JudulHeadr" style="padding-left: 5px;"></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowqty" class="form-control" value="0"></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; "></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowharga" class="form-control" value="0"></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowTH" class="form-control" value="0"></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowBK" class="form-control" value="0"></td>
+                        <td class="JudulHeadr" style="padding-left: 5px; "><input type="text" id="totalshowCBK" class="form-control" value="0"></td>
+                        <!--  <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Bulan</td>
                     <td class="JudulHeadr" style="padding-left: 5px; width: 10%; border-bottom: 1px solid black;">Tahun</td> -->
-                        </tr>
-                      </tfoot>
-                      <div id="dataLimitPK"></div>
-                      <input type="text" placeholder="Total Qty" id="totalhasil3" class="form-control" value="0" readonly style="display: none;">
+                      </tr>
+                    </tfoot>
+                    <div id="dataLimitPK"></div>
+                    <input type="text" placeholder="Total Qty" id="totalhasil3" class="form-control" value="0" readonly style="display: none;">
 
-                    </table>
-                  </div>
+                  </table>
+                </div>
 
-                  <div class="form-group">
-                    <div class="col-sm-8" style="margin-top:10px">
-                      <input class="btn btn-primary" type="submit" value="Simpan">
-                      <button class="btn btn-default btn-outline" type="reset">Reset</button>
-                    </div>
+                <div class="form-group">
+                  <div class="col-sm-8" style="margin-top:10px">
+                    <input class="btn btn-primary" type="submit" value="Simpan">
+                    <button class="btn btn-default btn-outline" type="reset">Reset</button>
                   </div>
+                </div>
 
               </form>
             </div>
