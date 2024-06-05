@@ -158,6 +158,7 @@ class PengeluaranRBB  extends CI_Controller{
         $terminal     = $this->model_global->edit_data($whereTer,'ref_terminal')->result();
         $terminal2          = $this->model_global->getAll('ref_terminal')->row();
         $wheretank          = array('id_terminal' => $terminal2->id_terminal);
+        $bendera            = $this->model_global->getAll('ref_negara_asal')->result();
         $tank2              = $this->model_global->edit_data($wheretank, 'ref_terminal_tank')->result();
 
         $data = array('contents' => 'Dashboard/PengeluaranRBB/add',
@@ -172,6 +173,7 @@ class PengeluaranRBB  extends CI_Controller{
               'terminal'      => $terminal,
               'terminal2'         => $terminal2,
               'tank2'             => $tank2,
+              'bendera'           => $bendera,
               'kodetrx'       => $this->auto_number->generate_id_bk()
         );
 
@@ -1016,7 +1018,7 @@ class PengeluaranRBB  extends CI_Controller{
                               
                           }
 
-                }else{
+                }   {
 
                   for ($i = 0; $i < $limit_pk; $i++) {
                     
