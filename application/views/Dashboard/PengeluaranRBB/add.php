@@ -14,7 +14,6 @@
   <!-- jQuery DateTimePicker JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
-
   <style>
     .table-container {
       width: 100%;
@@ -44,7 +43,7 @@
     }
 
     .box-shadow:focus {
-      box-shadow: 0 4px 8px rgba(0, 0, 255, 0.4);
+      box-shadow: 0 4px 8px rgba(0, 0, 255, 0.7);
     }
 
     .ui-datepicker-buttonpane .ui-datepicker-current {
@@ -108,7 +107,7 @@
 
                   <script>
                   $(function() {
-                    if (!Modernizr.inputtypes['date']) {
+                    if (!Modernizr.inputtypes['datetime-local']) {
                       $('input[type=date]').datepicker({
                         dateFormat: "mm-dd-yy"
                       })
