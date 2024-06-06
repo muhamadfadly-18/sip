@@ -382,7 +382,7 @@ class PengeluaranRBB  extends CI_Controller{
               $no_dokumen_pabean    = addslashes($this->input->post('no_dokumen_pabean'));
               $no_bukti_penerimaan  = addslashes($this->input->post('no_bukti_penerimaan'));
               $tgl_dokumen_pabean   = addslashes($this->input->post('tgl_dokumen_pabean'));
-              $negara_asal    = addslashes($this->input->post('negara_asal'));
+              $negara_asal    = addslashes($this->input->post('countries'));
   
               $id_group     = $this->session->userdata('id_group');
               $username     = $this->session->userdata('username');
@@ -523,7 +523,7 @@ class PengeluaranRBB  extends CI_Controller{
                               'nama_brg'          => $hasil_awal->nama_brg,
                               'id_barang'         => $keterangan,
                               'jumlah'            => $qty,
-                              'id_satuan'         => $sat,
+                              'id_satuan'         => $hasil_awal->uom,
                               'nilai_barang'      => $total,
                               'id_mata_uang'      => $cur,
                               'pembeli_penerima'  => $pengirim_barang_nama,

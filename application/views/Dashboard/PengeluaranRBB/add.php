@@ -1,43 +1,59 @@
-<style>
-  .table-container {
-    width: 100%;
-    overflow-x: auto;
-  }
+<!DOCTYPE html>
+<html lang="en">
 
-  .modal-content {
-    width: 1200px !important;
-    max-width: 100%;
-    margin: auto;
-  }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datepicker Example</title>
+  <!-- jQuery Library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery UI Library -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- jQuery DateTimePicker CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+  <!-- jQuery DateTimePicker JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
 
-  td,
-  td {
-    padding: 8px;
-    text-align: center;
-  }
+  <style>
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
 
-  .box-shadow {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-  }
+    .modal-content {
+      width: 1200px !important;
+      max-width: 100%;
+      margin: auto;
+    }
 
-  .box-shadow:focus {
-    box-shadow: 0 4px 8px rgba(0, 0, 255, 0.4);
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-  .ui-datepicker-buttonpane .ui-datepicker-current {
-    float: left;
-  }
-</style>
+    td,
+    td {
+      padding: 8px;
+      text-align: center;
+    }
 
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    .box-shadow {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .box-shadow:focus {
+      box-shadow: 0 4px 8px rgba(0, 0, 255, 0.4);
+    }
+
+    .ui-datepicker-buttonpane .ui-datepicker-current {
+      float: left;
+    }
+  </style>
+</head>
+
+
 
 <div class="page-content padding-30 container-fluid">
 
@@ -86,9 +102,20 @@
                     <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control box-shadow">
                   </div>
                   <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo : </label>
-            <div class="col-sm-4">
-                <input type="datetime-local" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" id="pengeluaran_kargo_tgl" class="form-control box-shadow">
-            </div>
+                  <div class="col-sm-4">
+                    <input type="datetime-local" id="pengeluaran_kargo_tgl" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" class="form-control box-shadow">
+                  </div>
+
+                  <script>
+                  $(function() {
+                    if (!Modernizr.inputtypes['date']) {
+                      $('input[type=date]').datepicker({
+                        dateFormat: "mm-dd-yy"
+                      })
+                    }
+                  });
+                </script>
+
                   <!-- <div class="col-sm-2">
                     <input type="time" name="pengeluaran_kargo_time" class="form-control" placeholder="" >
                   </div> -->
@@ -142,7 +169,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label" style="font-family: Arial;">Penerima Barang : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" name="pengirim_barang" placeholder="Nama Pengirim Barang" class="form-control box-shadow">
+                    <input type="text" autocomplete="off" placeholder="Nama Pengirim Barang" name="pengirim_barang" class="form-control box-shadow">
                     <!-- <select data-plugin="select2" name='pengirim_barang' id="pengirim_barang" class="form-control">
                       <option> Pilih pengirim </option>
                                   <?php
@@ -156,52 +183,28 @@
                   </div>
                   <label class="col-sm-2 control-label" style="font-family: Arial;">Tanggal Dokumen : </label>
                   <div class="col-sm-4">
-                    <input type="text" id="tgl_dokumen_pabean" name="tgl_dokumen_pabean" class="form-control box-shadow" placeholder="Tanggal Dokumen" value="">
+                    <input type="date" id="tgl_dokumen_pabean" name="tgl_dokumen_pabean" class="form-control box-shadow" placeholder="Tanggal Dokumen" value="">
                   </div>
-
-                  <script>
-                    $(document).ready(function() {
-                      $('#tgl_dokumen_pabean').datepicker({
-                        dateFormat: 'yy-mm-dd',
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: "-100:+0", // Allows selecting a year range from 100 years ago to the current year
-                        showButtonPanel: true,
-                        closeText: "Close",
-                        currentText: "Today",
-                        onClose: function(dateText, inst) {
-                          // Handle the "Today" button functionality
-                          var todayButton = $(inst.dpDiv).find('.ui-datepicker-current');
-                          todayButton.unbind('click').bind('click', function() {
-                            $.datepicker._selectDate(inst.input, new Date().toISOString().split('T')[0]);
-                          });
-                        },
-                        beforeShow: function(input, inst) {
-                          setTimeout(function() {
-                            var buttonPane = $(inst.dpDiv).find(".ui-datepicker-buttonpane");
-
-                            // Clear button
-                            $("<button>", {
-                              text: "Clear",
-                              click: function() {
-                                $.datepicker._clearDate(input);
-                              }
-                            }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
-                          }, 1);
-                        }
-                      });
-                    });
-                  </script>
-
                 </div>
 
+                <script>
+                  $(function() {
+                    if (!Modernizr.inputtypes['date']) {
+                      $('input[type=date]').datepicker({
+                        dateFormat: "mm-dd-yy"
+                      })
+                    }
+                  });
+                </script>
+
+
                 <div class="form-group">
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">File : </label>
+                  <label class="col-sm-2 control-label">File : </label>
                   <div class="col-sm-4">
-                    <input class="form-control box-shadow" id="file" name="file" type="file">
-                    <span style="color: red;font-size: 10px;">* Masukan Dokumen & lampirannya dalam Bentuk Format pdf / image.</span>
+                    <input class="form-control" id="file" name="file" type="file">
+                    <span style="color: red;font-size: 10px;">* Masukan Dokumen Pabean & lampirannya dalam Bentuk Format pdf / image.</span>
                   </div>
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">Negara Tujuan : </label>
+                  <label class="col-sm-2 control-label">Negara Asal Barang : </label>
                   <div class="col-sm-4">
                     <select data-plugin="select2" name='countries' id="" class="form-control">
                       <option value="0">-- Pilih Negara Asal Barang --</option>
@@ -212,8 +215,8 @@
                       ?>
                     </select>
                   </div>
-                </div>
 
+                </div>
                 <br>
                 <div class="col-md-12 mb-3 table-container">
                   <table id="" class="table table-hover table-bordered dataTable table-striped width-full overf">
