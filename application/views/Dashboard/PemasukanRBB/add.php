@@ -699,3 +699,35 @@
       )
     }).trigger("change")
   })
+  $(document).ready(function() {
+    $('#tgl_dokumen_pabean').datepicker({
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "-100:+0", // Allows selecting a year range from 100 years ago to the current year
+      showButtonPanel: true,
+      closeText: "Close",
+      currentText: "Today",
+      onClose: function(dateText, inst) {
+        // Handle the "Today" button functionality
+        var todayButton = $(inst.dpDiv).find('.ui-datepicker-current');
+        todayButton.unbind('click').bind('click', function() {
+          $.datepicker._selectDate(inst.input, new Date().toISOString().split('T')[0]);
+        });
+      },
+      beforeShow: function(input, inst) {
+        setTimeout(function() {
+          var buttonPane = $(inst.dpDiv).find(".ui-datepicker-buttonpane");
+
+          // Clear button
+          $("<button>", {
+            text: "Clear",
+            click: function() {
+              $.datepicker._clearDate(input);
+            }
+          }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+        }, 1);
+      }
+    });
+  });
+</script>

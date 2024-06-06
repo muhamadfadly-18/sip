@@ -200,12 +200,12 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label">File : </label>
                   <div class="col-sm-4">
-                    <input class="form-control" id="file" name="file" type="file">
+                    <input class="form-control box-shadow" id="file" name="file" type="file">
                     <span style="color: red;font-size: 10px;">* Masukan Dokumen Pabean & lampirannya dalam Bentuk Format pdf / image.</span>
                   </div>
                   <label class="col-sm-2 control-label">Negara Asal Barang : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='countries' id="" class="form-control">
+                    <select data-plugin="select2" name='countries' id="" class="form-control box-shadow">
                       <option value="0">-- Pilih Negara Asal Barang --</option>
                       <?php
                       foreach ($bendera  as $value) {   ?>
