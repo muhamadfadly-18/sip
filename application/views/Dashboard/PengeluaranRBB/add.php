@@ -14,7 +14,6 @@
   <!-- jQuery DateTimePicker JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
-
   <style>
     .table-container {
       width: 100%;
@@ -44,12 +43,13 @@
     }
 
     .box-shadow:focus {
-      box-shadow: 0 4px 8px rgba(0, 0, 255, 0.4);
+      box-shadow: 0 4px 8px rgba(0, 0, 255, 0.7);
     }
 
     .ui-datepicker-buttonpane .ui-datepicker-current {
       float: left;
     }
+    
   </style>
 </head>
 
@@ -101,14 +101,14 @@
                   <div class="col-sm-4">
                     <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control box-shadow">
                   </div>
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo :</label>
                   <div class="col-sm-4">
                     <input type="datetime-local" id="pengeluaran_kargo_tgl" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" class="form-control box-shadow">
                   </div>
 
                   <script>
                   $(function() {
-                    if (!Modernizr.inputtypes['date']) {
+                    if (!Modernizr.inputtypes['datetime-local']) {
                       $('input[type=date]').datepicker({
                         dateFormat: "mm-dd-yy"
                       })
@@ -201,12 +201,12 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label">File : </label>
                   <div class="col-sm-4">
-                    <input class="form-control" id="file" name="file" type="file">
+                    <input class="form-control box-shadow" id="file" name="file" type="file">
                     <span style="color: red;font-size: 10px;">* Masukan Dokumen Pabean & lampirannya dalam Bentuk Format pdf / image.</span>
                   </div>
                   <label class="col-sm-2 control-label">Negara Asal Barang : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='countries' id="" class="form-control">
+                    <select data-plugin="select2" name='countries' id="" class="form-control box-shadow">
                       <option value="0">-- Pilih Negara Asal Barang --</option>
                       <?php
                       foreach ($bendera  as $value) {   ?>
