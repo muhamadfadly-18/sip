@@ -206,7 +206,7 @@
                   </div>
                   <label class="col-sm-2 control-label">Negara Asal Barang : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='countries' id="" class="form-control box-shadow">
+                    <select data-plugin="select2" name='negara_asal' id="" class="form-control box-shadow">
                       <option value="0">-- Pilih Negara Asal Barang --</option>
                       <?php
                       foreach ($bendera  as $value) {   ?>
