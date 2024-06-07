@@ -278,6 +278,7 @@ class PengeluaranRBB  extends CI_Controller{
         $purchase           = $this->model_global->getAll('purchase')->result();
         $jenis            = $this->model_global->getAll('ref_jenis')->result();
         $barang             = $this->model_global->getAll('barang')->result();
+        $bendera            = $this->model_global->getAll('ref_negara_asal')->result();
         $kurs             = $this->model_global->getAll('ref_kurs')->result();
         $client       = $this->model_global->edit_data($where,'ref_client')->result();
         $terminal     = $this->model_global->edit_data($whereTer,'ref_terminal')->row();
@@ -293,6 +294,7 @@ class PengeluaranRBB  extends CI_Controller{
               'tank2'           => $tank2,
               'satuan'          => $satuan,
               'dokumen'         => $dokumen,
+              'bendera'          => $bendera,
               'barang'          => $barang,
               'jenis'           => $jenis,
               'kurs'            => $kurs,
@@ -302,6 +304,7 @@ class PengeluaranRBB  extends CI_Controller{
               'data_estimasi'       => $dataGet,
               'data_estimasi_result'     => $data_estimasi_result,
               'count_real'        => $count_real
+              
         );
 
         $this->load->view('Layouts/warper', $data);
