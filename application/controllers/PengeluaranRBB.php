@@ -372,7 +372,7 @@ class PengeluaranRBB  extends CI_Controller{
               $jenis_doc          = addslashes($this->input->post('jenis_doc'));
               $jenis_keluar       = addslashes($this->input->post('jenis_keluar'));
               $pengirim_barang_nama   = addslashes($this->input->post('pengirim_barang'));
-              $pengeluaran_kargo_tgl_real       = addslashes($this->input->post('pengeluaran_kargo_tgl'));
+              $pengeluaran_kargo_tgl_real = addslashes($this->input->post('pengeluaran_kargo_tgl'));
               $datetime =  new DateTime($pengeluaran_kargo_tgl_real);
               $pengeluaran_kargo_tgl = $datetime->format('Y-m-d');
               $pengeluaran_kargo_time = $datetime->format('H:i');

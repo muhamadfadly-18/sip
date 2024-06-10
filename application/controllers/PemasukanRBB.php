@@ -1316,9 +1316,7 @@ class PemasukanRBB  extends CI_Controller
                 );
 
                 $this->model_global->update_data($where_mutasi, $data_mutasi, 'mutasi_bahan_realisasi');
-
             
-
                 $data_update_notf = array(
                     'status'       => 2
                 );
