@@ -364,8 +364,9 @@ class PemasukanRBB  extends CI_Controller
                 $tgl_dokumen_pabean     = addslashes($this->input->post('tgl_dokumen_pabean'));
                 $negara_asal        = addslashes($this->input->post('countries'));
                 $nama_kapal         = addslashes($this->input->post('nama_kapal'));
-                $penerimaan_kargo_tgl         = addslashes($this->input->post('penerimaan_kargo_tgl'));
-                // $penerimaan_kargo_time        = addslashes($this->input->post('penerimaan_kargo_time'));
+                $datetime =  new DateTime($pengeluaran_kargo_tgl_real);
+                $penerimaan_kargo_tgl         = $datetime->format('Y-m-d');
+                $penerimaan_kargo_time        = $datetime->format('H:i');
 
                 $id_group       = $this->session->userdata('id_group');
                 $username       = $this->session->userdata('username');
@@ -538,7 +539,7 @@ class PemasukanRBB  extends CI_Controller
                     'biaya_kurs'        => $replacekurskoma,
                     'total_calculate'   => $replacecalculatebiayakurskoma,
                     'penerimaan_kargo_tgl'   => $penerimaan_kargo_tgl,
-                    // 'penerimaan_kargo_time'  => $penerimaan_kargo_time,
+                    'penerimaan_kargo_time'  => $penerimaan_kargo_time,
                     'status'            => 1
 
                 );
@@ -1315,9 +1316,7 @@ class PemasukanRBB  extends CI_Controller
                 );
 
                 $this->model_global->update_data($where_mutasi, $data_mutasi, 'mutasi_bahan_realisasi');
-
             
-
                 $data_update_notf = array(
                     'status'       => 2
                 );

@@ -1,3 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datepicker Example</title>
+  <!-- jQuery Library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery UI Library -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- jQuery DateTimePicker CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+  <!-- jQuery DateTimePicker JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
+  <style>
+    .box-shadow {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .box-shadow:focus {
+      box-shadow: 0 4px 8px rgba(0, 0, 255, 0.7);
+    }
+
+    .ui-datepicker-buttonpane .ui-datepicker-current {
+      float: left;
+    }
+  </style>
+</head>
+
 <div class="page-content padding-30 container-fluid">
 
   <div class="page-header">
@@ -49,23 +81,23 @@
 
 
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">No PO : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">No PO : </label>
                   <div class="col-sm-4">
                     <!-- <input type="text" autocomplete="off" placeholder="No PO"  name="po_number" class="form-control"> -->
-                    <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control" value="<?= $data_estimasi->no_transaksi ?>">
+                    <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control box-shadow" value="<?= $data_estimasi->no_transaksi ?>">
                   </div>
-                  <label class="col-sm-2 control-label">Penerimaan Kargo : </label>
-                  <div class="col-sm-2">
-                    <input type="date" autocomplete="off" placeholder="" name="penerimaan_kargo_tgl" class="form-control"  value="<?= $data_estimasi->penerimaan_kargo_tgl ?>">
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Penerimaan Kargo : </label>
+                  <div class="col-sm-4">
+                    <input type="datetime-local" autocomplete="off" placeholder="" name="penerimaan_kargo_tgl" class="form-control box-shadow"  value="<?= $data_estimasi->penerimaan_kargo_tgl . ' ' . $data_estimasi->penerimaan_kargo_time ?>">
                   </div>
-                  <div class="col-sm-2">
-                    <input type="time" name="penerimaan_kargo_time" class="form-control" placeholder="" value="<?= $data_estimasi->penerimaan_kargo_time ?>">
-                  </div>
+                  <!-- <div class="col-sm-2">
+                    <input type="time" name="penerimaan_kargo_time" class="form-control box-shadow" placeholder="" value="<?= $data_estimasi->penerimaan_kargo_time ?>">
+                  </div> -->
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">Jenis Penerimaan : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Jenis Penerimaan : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='jenis_pemasukan' id="jenis_pemasukan" class="form-control">
+                    <select data-plugin="select2" name='jenis_pemasukan' id="jenis_pemasukan" class="form-control box-shadow">
                       <option value="0">-- Pilih Jenis Penerimaan --</option>
                       <?php
 
@@ -75,11 +107,11 @@
                       ?>
 
                     </select>
-                    <span style="color: red;font-size: 10px;">* pilih Jenis Pemasukan wajib di isi</span>
+                    <span style="color: red;font-size: 10px;" style="font-family: Arial;">* pilih Jenis Pemasukan wajib di isi</span>
                   </div>
-                  <label class="col-sm-2 control-label">Jenis Dokumen Pabean : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Jenis Dokumen Pabean : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='jenis_doc' id="jenis_doc" class="form-control">
+                    <select data-plugin="select2" name='jenis_doc' id="jenis_doc" class="form-control box-shadow">
                       <!-- <option value=''>None</option>-->
                       <option value="0">-- Pilih Jenis Dokumen --</option>
                       <?php
@@ -94,36 +126,46 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">No. Bukti Penerimaan / Delivery Order (DO) : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">No. Bukti Penerimaan / Delivery Order (DO) : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="No. Bukti Penerimaan / Delivery Order (DO)" name="no_bukti_penerimaan" class="form-control" value="<?= $dataGet->no_bukti_penerimaan ?>">
+                    <input type="text" autocomplete="off" placeholder="No. Bukti Penerimaan / Delivery Order (DO)" name="no_bukti_penerimaan" class="form-control box-shadow" value="<?= $dataGet->no_bukti_penerimaan ?>">
                   </div>
-                  <label class="col-sm-2 control-label">No Dokumen : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">No Dokumen : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="No Dokumen Pabean" name="no_dokumen_pabean" class="form-control" value="<?= $dataGet->no_dokumen_pabean ?>">
+                    <input type="text" autocomplete="off" placeholder="No Dokumen Pabean" name="no_dokumen_pabean" class="form-control box-shadow" value="<?= $dataGet->no_dokumen_pabean ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">Nama Pengirim Barang : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Nama Pengirim Barang : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="Nama Pengirim Barang"  name="pengirim_barang" class="form-control" value="<?= $dataGet->id_client ?>">
+                    <input type="text" autocomplete="off" placeholder="Nama Pengirim Barang"  name="pengirim_barang" class="form-control box-shadow" value="<?= $dataGet->id_client ?>">
                     <span style="color: red;font-size: 10px;">* pilih Pengirim Barang wajib di isi</span>
                   </div>
-                  <label class="col-sm-2 control-label">Tanggal Dokumen : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Tanggal Dokumen : </label>
                   <div class="col-sm-4">
-                    <input type="date" name="tgl_dokumen_pabean" class="form-control" placeholder="Tanggal lahir" value="<?= $dataGet->tgl_dokumen_pabean ?>">
+                    <input type="date" id="tgl_dokumen_pabean" name="tgl_dokumen_pabean" class="form-control box-shadow"  value="<?= $dataGet->tgl_dokumen_pabean ?>">
                   </div>
                 </div>
 
+                <script>
+                  $(function() {
+                    if (!Modernizr.inputtypes['date']) {
+                      $('input[type=date]').datepicker({
+                        dateFormat: "mm-dd-yy"
+                      })
+                    }
+                  });
+                </script>
+
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">File : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">File : </label>
                   <div class="col-sm-4">
-                    <input class="form-control" id="file" name="file" type="file">
+                    <input class="form-control box-shadow" id="file" name="file" type="file">
                     <span style="color: red;font-size: 10px;">* Masukan Dokumen Pabean & lampirannya dalam Bentuk Format zip.</span>
                   </div>
-                  <label class="col-sm-2 control-label">Negara Asal Barang : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Negara Asal Barang : </label>
                   <div class="col-sm-4">
-                   <select data-plugin="select2" name='countries' id="" class="form-control">
+                   <select data-plugin="select2" name='countries' id="" class="form-control box-shadow">
                                 <option value="0">-- Pilih Negara Asal Barang --</option>
                                     <?php
                                         foreach($bendera  as $value)
@@ -136,13 +178,13 @@
                   
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">File Estimasi : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">File Estimasi : </label>
                   <div class="col-sm-4">
                       <a href="https://app.asinusa.co.id/sip/uploads/<?= $dataGet->file ?>" class="btn btn-sm btn-primary" style="align:center;" target="_blank"><i class="fa fa-folder-open-o"></i>  Cek File</a>
                   </div>
-                  <label class="col-sm-2 control-label">Nama Kapal : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Nama Kapal : </label>
                   <div class="col-sm-4">
-                    <input type="text" autocomplete="off" placeholder="Nama Kapal" name="nama_kapal" class="form-control" value="<?= $dataGet->nama_kapal ?>" readonly>
+                    <input type="text" autocomplete="off" placeholder="Nama Kapal" name="nama_kapal" class="form-control box-shadow" value="<?= $dataGet->nama_kapal ?>" readonly>
                   </div>
                 </div>
                 

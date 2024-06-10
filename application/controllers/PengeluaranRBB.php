@@ -278,6 +278,7 @@ class PengeluaranRBB  extends CI_Controller{
         $purchase           = $this->model_global->getAll('purchase')->result();
         $jenis            = $this->model_global->getAll('ref_jenis')->result();
         $barang             = $this->model_global->getAll('barang')->result();
+        $bendera            = $this->model_global->getAll('ref_negara_asal')->result();
         $kurs             = $this->model_global->getAll('ref_kurs')->result();
         $client       = $this->model_global->edit_data($where,'ref_client')->result();
         $terminal     = $this->model_global->edit_data($whereTer,'ref_terminal')->row();
@@ -290,6 +291,7 @@ class PengeluaranRBB  extends CI_Controller{
               'kategori_barang'     => $kategori_barang,
               'notif'           => $notif,
               'terminal2'       => $terminal2,
+              'bendera'     => $bendera,
               'tank2'           => $tank2,
               'satuan'          => $satuan,
               'dokumen'         => $dokumen,
@@ -300,8 +302,10 @@ class PengeluaranRBB  extends CI_Controller{
               'purchase'        => $purchase,
               'terminal'        => $terminal,
               'data_estimasi'       => $dataGet,
-              'data_estimasi_result'     => $data_estimasi_result,
-              'count_real'        => $count_real
+              'data_estimasi_result'   => $data_estimasi_result,
+              'bendera'         => $bendera,
+              'count_real'      => $count_real
+              
         );
 
         $this->load->view('Layouts/warper', $data);
@@ -368,8 +372,18 @@ class PengeluaranRBB  extends CI_Controller{
               $jenis_doc          = addslashes($this->input->post('jenis_doc'));
               $jenis_keluar       = addslashes($this->input->post('jenis_keluar'));
               $pengirim_barang_nama   = addslashes($this->input->post('pengirim_barang'));
-              $pengeluaran_kargo_tgl       = addslashes($this->input->post('pengeluaran_kargo_tgl'));
-              $pengeluaran_kargo_time      = addslashes($this->input->post('pengeluaran_kargo_time'));
+              $pengeluaran_kargo_tgl_real = addslashes($this->input->post('pengeluaran_kargo_tgl'));
+              $datetime =  new DateTime($pengeluaran_kargo_tgl_real);
+              $pengeluaran_kargo_tgl = $datetime->format('Y-m-d');
+              $pengeluaran_kargo_time = $datetime->format('H:i');
+
+              // Buat objek DateTime dari string
+              
+
+              // Ambil tanggal dan waktu
+              
+              // die();
+              // $pengeluaran_kargo_time      = addslashes($this->input->post('pengeluaran_kargo_time'));
               // echo $pengeluaran_kargo_tgl;
               // echo "---";
               // echo $pengeluaran_kargo_time;
@@ -382,7 +396,7 @@ class PengeluaranRBB  extends CI_Controller{
               $no_dokumen_pabean    = addslashes($this->input->post('no_dokumen_pabean'));
               $no_bukti_penerimaan  = addslashes($this->input->post('no_bukti_penerimaan'));
               $tgl_dokumen_pabean   = addslashes($this->input->post('tgl_dokumen_pabean'));
-              $negara_asal    = addslashes($this->input->post('countries'));
+              $negara_asal    = addslashes($this->input->post('negara_asal'));
   
               $id_group     = $this->session->userdata('id_group');
               $username     = $this->session->userdata('username');
@@ -516,9 +530,9 @@ class PengeluaranRBB  extends CI_Controller{
                               'no_dokumen_pabean'   => $no_dokumen_pabean,
                               'no_bukti_pengeluaran'  => $no_bukti_penerimaan,
                               'tgl_dokumen_pabean'  => $tgl_dokumen_pabean,
-                              'negara_tujuan'     => $negara_asal,
                               'created_at'        => $created_at,
                               'id_group'          => $id_group,
+                              'negara_tujuan'     => $negara_asal,
                               'id_client'         => $pengirim_barang,
                               'nama_brg'          => $hasil_awal->nama_brg,
                               'id_barang'         => $keterangan,
@@ -1191,54 +1205,51 @@ class PengeluaranRBB  extends CI_Controller{
     }
   }
 
-  public function add_action_realisasi(){
-    if($this->session->userdata('name_user') and $this->session->userdata('username')){
-      if($this->model_user_access->access_add() == 1){
+public function add_action_realisasi() {
+    if ($this->session->userdata('name_user') && $this->session->userdata('username')) {
+        if ($this->model_user_access->access_add() == 1) {
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'gif|jpeg|jpg|png|pdf';
+            $config['max_size'] = '500000';
+            $config['overwrite'] = 'TRUE';
+            $fileFotoReplace = $_FILES['file']['name'];
+            $fileFoto = str_replace(" ", "_", $fileFotoReplace);
 
-                $config['upload_path']          = './uploads/';
-                $config['allowed_types']        = 'gif|jpeg|jpg|png|pdf';
-                $config['max_size']             = '500000';
-                $config['overwrite']            = 'TRUE';
-                $fileFotoReplace                = $_FILES['file']['name'];
-                $fileFoto                       = str_replace(" ","_", $fileFotoReplace);
+            if (empty($fileFoto)) {
+                $file_real = addslashes($this->input->post('fileget'));
+            } else {
+                $file_real = $fileFoto;
+            }
 
-                if(empty($fileFoto)){
-                    $file_real      = addslashes($this->input->post('fileget'));
-                }else{
-                    $file_real      = $fileFoto;
-                }
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            $this->upload->do_upload('file');
 
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
+            $gbr = $this->upload->data();
 
-                $this->upload->do_upload('file');
+            // Collect form data
+            $id_bm = addslashes($this->input->post('id_bm'));
+            $keterangan = addslashes($this->input->post('id_barang_real'));
+            $keterangan2 = addslashes($this->input->post('keterangan2'));
+            $terminal = addslashes($this->input->post('terminal_real'));
+            $sat_real = addslashes($this->input->post('sat_real'));
+            $po_number = addslashes($this->input->post('po_number'));
+            $no_transaksi = addslashes($this->input->post('no_transaksi'));
+            $tgl_transaksi = addslashes($this->input->post('tgl_transaksi'));
+            $jenis_doc = addslashes($this->input->post('jenis_doc'));
+            $jenis_keluar = addslashes($this->input->post('jenis_keluar'));
+            $pengeluaran_kargo_tgl = addslashes($this->input->post('pengeluaran_kargo_tgl'));
+            $pengeluaran_kargo_time = addslashes($this->input->post('pengeluaran_kargo_time'));
+            $pengirim_barang_nama = addslashes($this->input->post('pengirim_barang'));
+            $no_dokumen_pabean = addslashes($this->input->post('no_dokumen_pabean'));
+            $no_bukti_penerimaan = addslashes($this->input->post('no_bukti_penerimaan'));
+            $tgl_dokumen_pabean = addslashes($this->input->post('tgl_dokumen_pabean'));
+            $negara_asal = addslashes($this->input->post('negara_asal'));
 
-                $gbr = $this->upload->data();
-
-                $id_bm              = addslashes($this->input->post('id_bm'));
-                $keterangan         = addslashes($this->input->post('id_barang_real'));
-                $keterangan2        = addslashes($this->input->post('keterangan2'));
-                $terminal           = addslashes($this->input->post('terminal_real'));
-                $sat_real           = addslashes($this->input->post('sat_real'));
-                $po_number      = addslashes($this->input->post('po_number'));
-                $no_transaksi     = addslashes($this->input->post('no_transaksi'));
-                $tgl_transaksi    = addslashes($this->input->post('tgl_transaksi'));
-                $jenis_doc      = addslashes($this->input->post('jenis_doc'));
-                $jenis_keluar     = addslashes($this->input->post('jenis_keluar'));
-                $pengeluaran_kargo_tgl  = addslashes($this->input->post('pengeluaran_kargo_tgl'));
-                $pengeluaran_kargo_time = addslashes($this->input->post('pengeluaran_kargo_time'));
-                $pengirim_barang_nama = addslashes($this->input->post('pengirim_barang'));
-
-                $no_dokumen_pabean    = addslashes($this->input->post('no_dokumen_pabean'));
-                $no_bukti_penerimaan  = addslashes($this->input->post('no_bukti_penerimaan'));
-                $tgl_dokumen_pabean   = addslashes($this->input->post('tgl_dokumen_pabean'));
-                $negara_asal    = addslashes($this->input->post('negara_asal'));
-
-                $id_group     = $this->session->userdata('id_group');
-                $username     = $this->session->userdata('username');
-                $created_at     = addslashes(date("Y-m-d H:i:s"));
-
-                $count_loop = addslashes($this->input->post('count_loop'));
+            $id_group = $this->session->userdata('id_group');
+            $username = $this->session->userdata('username');
+            $created_at = addslashes(date("Y-m-d H:i:s"));
+            $count_loop = addslashes($this->input->post('count_loop'));
 
                 if($jenis_keluar == 3){
 

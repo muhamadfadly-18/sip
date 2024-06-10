@@ -101,7 +101,7 @@
                   <div class="col-sm-4">
                     <input type="text" autocomplete="off" placeholder="No PO" name="po_number" class="form-control box-shadow">
                   </div>
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo :</label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo: </label>
                   <div class="col-sm-4">
                     <input type="datetime-local" id="pengeluaran_kargo_tgl" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" class="form-control box-shadow">
                   </div>
@@ -206,7 +206,7 @@
                   </div>
                   <label class="col-sm-2 control-label">Negara Asal Barang : </label>
                   <div class="col-sm-4">
-                    <select data-plugin="select2" name='countries' id="" class="form-control box-shadow">
+                    <select data-plugin="select2" name='negara_asal' id="" class="form-control box-shadow">
                       <option value="0">-- Pilih Negara Asal Barang --</option>
                       <?php
                       foreach ($bendera  as $value) {   ?>
