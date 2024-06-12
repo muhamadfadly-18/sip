@@ -113,7 +113,7 @@
 
                     </select> -->
                   </div>
-                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo : </label>
+                  <label class="col-sm-2 control-label" style="font-family: Arial;">Pengeluaran Kargo: </label>
                   <div class="col-sm-4">
                     <input type="datetime-local" autocomplete="off" placeholder="" name="pengeluaran_kargo_tgl" class="form-control box-shadow">
                   </div>

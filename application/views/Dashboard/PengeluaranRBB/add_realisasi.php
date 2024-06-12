@@ -361,22 +361,43 @@
   })
 
   String.prototype.number_format = function(d) {
-    var n = this;
-    var c = isNaN(d = Math.abs(d)) ? 2 : d;
-    var s = n < 0 ? "-" : "";
-    var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-      j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + ',' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ',') + (c ? '.' + Math.abs(n - i).toFixed(c).slice(2) : "");
-  }
+  var n = this;
+  var c = isNaN(d = Math.abs(d)) ? 2 : d;
+  var s = n < 0 ? "-" : "";
+  var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+    j = (j = i.length) > 3 ? j % 3 : 0;
+  return s + (j ? i.substr(0, j) + ',' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ',') + (c ? '.' + Math.abs(n - i).toFixed(c).slice(2) : "");
+}
 
-  String.prototype.number_format2 = function(d) {
-    var n = this;
-    var c = isNaN(d = Math.abs(d)) ? 2 : d;
-    var s = n < 0 ? "-" : "";
-    var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-      j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + '.' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + '.') + (c ? ',' + Math.abs(n - i).toFixed(c).slice(2) : "");
-  }
+String.prototype.number_format2 = function(d) {
+  var n = this;
+  var c = isNaN(d = Math.abs(d)) ? 2 : d;
+  var s = n < 0 ? "-" : "";
+  var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+    j = (j = i.length) > 3 ? j % 3 : 0;
+  return s + (j ? i.substr(0, j) + '.' : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + '.') + (c ? ',' + Math.abs(n - i).toFixed(c).slice(2) : "");
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  var hargaInputs = document.querySelectorAll('input[id^="harga_satuan_real"]');
+  var biayaKursInputs = document.querySelectorAll('input[id^="biaya_kurs_real"]');
+
+  hargaInputs.forEach(function(input) {
+    input.addEventListener('keyup', function() {
+      var value = this.value.replace(/\D/g, '');
+      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.value = value;
+    });
+  });
+
+  biayaKursInputs.forEach(function(input) {
+    input.addEventListener('keyup', function() {
+      var value = this.value.replace(/\D/g, '');
+      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.value = value;
+    });
+  });
+});
 
   var qty_real = document.getElementById('qty_real').value;
   var harga_satuan_real = document.getElementById('harga_satuan_real');
@@ -392,89 +413,75 @@
   });
 
   function myFunctionKeyup(rowid) {
-    var table = document.getElementById("myTablePK");
+  var table = document.getElementById("myTablePK");
 
-    var qty_real = parseInt(document.getElementById("qty_real" + rowid).value);
-    var qty_get = parseInt(document.getElementById("qty_get" + rowid).value);
+  var qty_real = parseInt(document.getElementById("qty_real" + rowid).value);
+  var qty_get = parseInt(document.getElementById("qty_get" + rowid).value);
 
-    var harga_satuan_real = parseInt(document.getElementById("harga_satuan_real" + rowid).value);
-    var hasil_real = document.getElementById("hasil_real" + rowid);
-    var hasil_real_show = document.getElementById("hasil_real_show" + rowid);
-    var result_real = qty_real * harga_satuan_real;
-    var selisih = qty_get - qty_real;
+  var harga_satuan_real = parseInt(document.getElementById("harga_satuan_real" + rowid).value.replace(/\D/g, ''));
+  var hasil_real = document.getElementById("hasil_real" + rowid);
+  var hasil_real_show = document.getElementById("hasil_real_show" + rowid);
+  var result_real = qty_real * harga_satuan_real;
+  var selisih = qty_get - qty_real;
 
-    let text = result_real.toString();
-    hasil_real.value = result_real;
-    hasil_real_show.value = text.number_format2();
+  hasil_real.value = result_real;
+  hasil_real_show.value = result_real.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    var calculated_total_sum_qty = 0;
-    $("#myTablePK .classQty").each(function() {
-      var get_textbox_value = $(this).val().replace(",", "");
-      calculated_total_sum_qty += parseFloat(get_textbox_value);
-    });
+  var calculated_total_sum_qty = 0;
+  $("#myTablePK .classQty").each(function() {
+    var get_textbox_value = $(this).val().replace(/\D/g, '');
+    calculated_total_sum_qty += parseFloat(get_textbox_value);
+  });
 
-    var calculated_total_sum_harga = 0;
-    $("#myTablePK .classHarga").each(function() {
-      var get_textbox_value = $(this).val().replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(",", ".");
-      calculated_total_sum_harga += parseFloat(get_textbox_value);
-    });
+  var calculated_total_sum_harga = 0;
+  $("#myTablePK .classHarga").each(function() {
+    var get_textbox_value = $(this).val().replace(/\D/g, '');
+    calculated_total_sum_harga += parseFloat(get_textbox_value);
+  });
 
-    var calculated_total_sum_total_harga = 0;
-    $("#myTablePK .classTotalHarga").each(function() {
-      var get_textbox_value = $(this).val().replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(",", ".");
-      calculated_total_sum_total_harga += parseFloat(get_textbox_value);
-    });
+  var calculated_total_sum_total_harga = 0;
+  $("#myTablePK .classTotalHarga").each(function() {
+    var get_textbox_value = $(this).val().replace(/\D/g, '');
+    calculated_total_sum_total_harga += parseFloat(get_textbox_value);
+  });
 
-    var calculated_total_sum_biaya_kurs = 0;
-    $("#myTablePK .classBiayaKurs").each(function() {
-      var get_textbox_value = $(this).val().replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(",", ".");
-      calculated_total_sum_biaya_kurs += parseFloat(get_textbox_value);
-    });
+  var calculated_total_sum_biaya_kurs = 0;
+  $("#myTablePK .classBiayaKurs").each(function() {
+    var get_textbox_value = $(this).val().replace(/\D/g, '');
+    calculated_total_sum_biaya_kurs += parseFloat(get_textbox_value);
+  });
 
-    var calculated_total_sum_total_biaya_kurs = 0;
-    $("#myTablePK .classTotalBiayaKurs").each(function() {
-      var get_textbox_value = $(this).val().replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(",", ".");
-      calculated_total_sum_total_biaya_kurs += parseFloat(get_textbox_value);
-    });
+  var calculated_total_sum_total_biaya_kurs = 0;
+  $("#myTablePK .classTotalBiayaKurs").each(function() {
+    var get_textbox_value = $(this).val().replace(/\D/g, '');
+    calculated_total_sum_total_biaya_kurs += parseFloat(get_textbox_value);
+  });
 
-    document.getElementById("selisihqty" + rowid).innerHTML = selisih;
-    document.getElementById("totalshowqty").value = calculated_total_sum_qty;
-    document.getElementById("totalshowharga").value = calculated_total_sum_harga.toString().number_format2();
-    document.getElementById("totalshowTH").value = calculated_total_sum_total_harga.toString().number_format2();
-    document.getElementById("totalshowBK").value = calculated_total_sum_biaya_kurs.toString().number_format2();
-    document.getElementById("totalshowCBK").value = calculated_total_sum_total_biaya_kurs.toString().number_format2();
-  }
+  document.getElementById("selisihqty" + rowid).innerHTML = selisih;
+  document.getElementById("totalshowqty").value = calculated_total_sum_qty.toLocaleString('en-US');
+  document.getElementById("totalshowharga").value = calculated_total_sum_harga.toLocaleString('en-US');
+  document.getElementById("totalshowTH").value = calculated_total_sum_total_harga.toLocaleString('en-US');
+  document.getElementById("totalshowBK").value = calculated_total_sum_biaya_kurs.toLocaleString('en-US');
+  document.getElementById("totalshowCBK").value = calculated_total_sum_total_biaya_kurs.toLocaleString('en-US');
+}
 
-  function myFunctionKeyupKurs(rowid) {
+function myFunctionKeyupKurs(rowid) {
 
-    var hasil_real = document.getElementById("hasil_real" + rowid).value;
-    var biaya_kurs = document.getElementById("biaya_kurs_real" + rowid).value;
-    var get_textbox_valuer1 = biaya_kurs.replace(".", "");
-    var get_textbox_valuer2 = get_textbox_valuer1.replace(",", ".");
-    var calculate = hasil_real * get_textbox_valuer2;
-    var hasilcalculate = calculate.toString().number_format2();
-    document.getElementById("total_calculate" + rowid).value = hasilcalculate;
+  var hasil_real = document.getElementById("hasil_real" + rowid).value;
+  var biaya_kurs = document.getElementById("biaya_kurs_real" + rowid).value.replace(/\D/g, '');
+  var get_textbox_valuer1 = biaya_kurs.replace(/\D/g, '');
+  var get_textbox_valuer2 = get_textbox_valuer1.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  var calculate = hasil_real * get_textbox_valuer2;
+  var hasilcalculate = calculate.toLocaleString('en-US');
+  document.getElementById("total_calculate" + rowid).value = hasilcalculate;
 
-    var table = document.getElementById("myTablePK");
+  var table = document.getElementById("myTablePK");
 
-    var calculated_total_sum_total_biaya_kurs = 0;
-    $("#myTablePK .classTotalBiayaKurs").each(function() {
-      var get_textbox_value = $(this).val().replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(".", "");
-      var get_textbox_value = get_textbox_value.replace(",", ".");
-      calculated_total_sum_total_biaya_kurs += parseFloat(get_textbox_value);
-    });
-    document.getElementById("totalshowCBK").value = calculated_total_sum_total_biaya_kurs.toString().number_format2();
-  }
+  var calculated_total_sum_total_biaya_kurs = 0;
+  $("#myTablePK .classTotalBiayaKurs").each(function() {
+    var get_textbox_value = $(this).val().replace(/\D/g, '');
+    calculated_total_sum_total_biaya_kurs += parseFloat(get_textbox_value);
+  });
+  document.getElementById("totalshowCBK").value = calculated_total_sum_total_biaya_kurs.toLocaleString('en-US');
+}
 </script>
