@@ -495,56 +495,63 @@
 
 
     // Fungsi untuk menghitung biaya kurs
-    function calculateBiayaKurs(a) {
-      // Mengambil nilai total dan biaya kurs dari input
-      var total = Number(document.getElementById("total" + a).value);
-      var biayakurs = document.getElementById("biayakurs" + a).value;
+   // Fungsi untuk menghitung biaya kurs
+function calculateBiayaKurs(a) {
+    // Mengambil nilai total dan biaya kurs dari input
+    var total = Number(document.getElementById("total" + a).value);
+    var biayakurs = document.getElementById("biayakurs" + a).value;
 
-      // Menghilangkan tanda titik sebagai pemisah ribuan, dan mengganti koma menjadi titik sebagai pemisah desimal
-      var text = biayakurs.replace(/\./g, '').replace(',', '.');
+    // Menghilangkan tanda titik sebagai pemisah ribuan, dan mengganti koma menjadi titik sebagai pemisah desimal
+    var text = biayakurs.replace(/\./g, '').replace(',', '.');
 
-      // Menghitung biaya kurs
-      var calculatebiayakurs = total * parseFloat(text);
+    // Menghitung biaya kurs
+    var calculatebiayakurs = total * parseFloat(text);
 
-      // Memformat hasil biaya kurs dengan 2 desimal
-      let textstring = calculatebiayakurs.toFixed(2);
+    // Memformat hasil biaya kurs dengan 2 desimal
+    let textstring = calculatebiayakurs.toFixed(2);
 
-      // Menampilkan hasil biaya kurs di input yang ditunjukkan kepada pengguna
-      document.getElementById("calculatebiayakursshow" + a).value = textstring.number_format2();
+    // Menampilkan hasil biaya kurs di input yang ditunjukkan kepada pengguna
+    document.getElementById("calculatebiayakursshow" + a).value = textstring.number_format2();
 
-      // Menyimpan hasil biaya kurs dalam input yang tersembunyi untuk keperluan pengiriman data
-      document.getElementById("calculatebiayakurs" + a).value = calculatebiayakurs;
+    // Menyimpan hasil biaya kurs dalam input yang tersembunyi untuk keperluan pengiriman data
+    document.getElementById("calculatebiayakurs" + a).value = calculatebiayakurs;
 
-      // Menghitung total biaya kurs dari semua input biaya kurs
-      var calculated_total_sum_biaya_kurs = 0;
-      $("#myTablePK .classBiayaKurs").each(function() {
+    // Menghitung total biaya kurs dari semua input biaya kurs
+    var calculated_total_sum_biaya_kurs = 0;
+    $("#myTablePK .classBiayaKurs").each(function() {
         var get_textbox_value = $(this).val().replace(/\./g, '').replace(',', '.');
         calculated_total_sum_biaya_kurs += parseFloat(get_textbox_value) || 0;
-      });
+    });
 
-      // Menghitung total biaya kurs dari semua input hasil biaya kurs yang ditampilkan
-      var calculated_total_sum_total_biaya_kurs = 0;
-      $("#myTablePK .classCalculateBiayaKursShow").each(function() {
+    // Menghitung total biaya kurs dari semua input hasil biaya kurs yang ditampilkan
+    var calculated_total_sum_total_biaya_kurs = 0;
+    $("#myTablePK .classCalculateBiayaKursShow").each(function() {
         var get_textbox_value = $(this).val().replace(/\./g, '').replace(',', '.');
         calculated_total_sum_total_biaya_kurs += parseFloat(get_textbox_value) || 0;
-      });
-
-      // Menampilkan total biaya kurs ke dalam input yang sesuai
-      document.getElementById("totalshowBK").value = calculated_total_sum_biaya_kurs.toFixed(2).number_format2();
-      document.getElementById("totalshowCBK").value = calculated_total_sum_total_biaya_kurs.toFixed(2).number_format2();
-    }
-
-    // Memasang event listener untuk setiap input harga yang dimulai dengan "harga"
-    $(document).on('keyup', '[id^=harga]', function() {
-      var id = $(this).attr('id').replace(/^\D+/g, ''); // Mengambil angka dari ID
-      calculateBiayaKurs(id); // Memanggil fungsi calculateBiayaKurs dengan ID yang sesuai
     });
 
-    // Memasang event listener untuk setiap input biaya kurs yang dimulai dengan "biayakurs"
-    $(document).on('keyup', '[id^=biayakurs]', function() {
-      var id = $(this).attr('id').replace(/^\D+/g, ''); // Mengambil angka dari ID
-      calculateBiayaKurs(id); // Memanggil fungsi calculateBiayaKurs dengan ID yang sesuai
-    });
+    // Menampilkan total biaya kurs ke dalam input yang sesuai
+    document.getElementById("totalshowBK").value = calculated_total_sum_biaya_kurs.toFixed(2).number_format2();
+    document.getElementById("totalshowCBK").value = calculated_total_sum_total_biaya_kurs.toFixed(2).number_format2();
+}
+
+// Memasang event listener untuk setiap input harga yang dimulai dengan "harga"
+$(document).on('keyup', '[id^=harga]', function() {
+    var id = $(this).attr('id').replace(/^\D+/g, ''); // Mengambil angka dari ID
+    calculateBiayaKurs(id); // Memanggil fungsi calculateBiayaKurs dengan ID yang sesuai
+});
+
+// Memasang event listener untuk setiap input biaya kurs yang dimulai dengan "biayakurs"
+$(document).on('keyup', '[id^=biayakurs]', function() {
+    var id = $(this).attr('id').replace(/^\D+/g, ''); // Mengambil angka dari ID
+
+    // Mengambil nilai dari input biaya kurs dan memformatnya sebagai angka dengan format yang diinginkan
+    var formatted_biayakurs = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    $(this).val(formatted_biayakurs);
+
+    calculateBiayaKurs(id); // Memanggil fungsi calculateBiayaKurs dengan ID yang sesuai
+});
+
 
 
 
