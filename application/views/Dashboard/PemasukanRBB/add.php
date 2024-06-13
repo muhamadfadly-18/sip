@@ -494,8 +494,12 @@
 
 
 
-    // Fungsi untuk menghitung biaya kurs
-   // Fungsi untuk menghitung biaya kurs
+// Custom number format function
+Number.prototype.number_format2 = function() {
+    return this.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace(/,/g, '.').replace(/\.(\d{2})$/, ',$1');
+};
+
+// Fungsi untuk menghitung biaya kurs
 function calculateBiayaKurs(a) {
     // Mengambil nilai total dan biaya kurs dari input
     var total = Number(document.getElementById("total" + a).value);
@@ -511,7 +515,7 @@ function calculateBiayaKurs(a) {
     let textstring = calculatebiayakurs.toFixed(2);
 
     // Menampilkan hasil biaya kurs di input yang ditunjukkan kepada pengguna
-    document.getElementById("calculatebiayakursshow" + a).value = textstring.number_format2();
+    document.getElementById("calculatebiayakursshow" + a).value = parseFloat(textstring).number_format2();
 
     // Menyimpan hasil biaya kurs dalam input yang tersembunyi untuk keperluan pengiriman data
     document.getElementById("calculatebiayakurs" + a).value = calculatebiayakurs;
@@ -546,11 +550,24 @@ $(document).on('keyup', '[id^=biayakurs]', function() {
     var id = $(this).attr('id').replace(/^\D+/g, ''); // Mengambil angka dari ID
 
     // Mengambil nilai dari input biaya kurs dan memformatnya sebagai angka dengan format yang diinginkan
-    var formatted_biayakurs = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    var biayakurs = $(this).val().replace(/[^\d,]/g, '');
+    var parts = biayakurs.split(',');
+
+    if (parts[1]) {
+        parts[1] = parts[1].substring(0, 2); // Batasi ke dua digit setelah koma
+    }
+
+    var formatted_biayakurs = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    if (parts[1]) {
+        formatted_biayakurs += ',' + parts[1];
+    }
+
     $(this).val(formatted_biayakurs);
 
     calculateBiayaKurs(id); // Memanggil fungsi calculateBiayaKurs dengan ID yang sesuai
 });
+
 
 
 
