@@ -1247,8 +1247,8 @@ public function add_action_realisasi() {
             $negara_asal = addslashes($this->input->post('negara_asal'));
             $pengeluaran_kargo_tgl_real = addslashes($this->input->post('pengeluaran_kargo_tgl'));
             $datetime =  new DateTime($pengeluaran_kargo_tgl_real);
-            $penerimaan_kargo_tgl         = $datetime->format('Y-m-d');
-            $penerimaan_kargo_time        = $datetime->format('H:i');
+            $pengeluaran_kargo_tgl         = $datetime->format('Y-m-d');
+            $pengeluaran_kargo_time        = $datetime->format('H:i');
 
             $id_group = $this->session->userdata('id_group');
             $username = $this->session->userdata('username');
@@ -1353,8 +1353,8 @@ public function add_action_realisasi() {
                             'terminal_tank'     => $tank,
                             'harga'             => $harga,
                             'file'              => $file_real,
-                            'penerimaan_kargo_tgl'   => $penerimaan_kargo_tgl,
-                            'penerimaan_kargo_time'  => $penerimaan_kargo_time,
+                            'pengeluaran_kargo_tgl'   => $pengeluaran_kargo_tgl,
+                            'pengeluaran_kargo_time'  => $pengeluaran_kargo_time,
                             'biaya_kurs'        => $replacekurskoma,
                             'total_calculate'   => $replacecalculatebiayakurskoma,
                             'status'            => 3
